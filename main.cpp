@@ -16,11 +16,13 @@ int main(int argc, char* argv[]){
     BaseObjects g_background;
     Spaceship HYPERION;
 
-    while(true){
+    g_background.loadImg("images//galaxy2.jpg", renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
+    HYPERION.loadObject("images//spaceship.png", renderer);	
 
-        g_background.loadImg("images//galaxy2.jpg", renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
+    while(true){
+	    
         g_background.render(renderer, 0, 0);
-        HYPERION.loadObject("images//spaceship.png", renderer);
+        
         HYPERION.show(renderer, HYPERION.x_, HYPERION.y_);
         SDL_RenderPresent(renderer);
 
