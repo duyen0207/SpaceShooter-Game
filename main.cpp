@@ -42,8 +42,7 @@ int main(int argc, char* argv[]){
         		default: break;
 			}
         }
-        g_background.~BaseObjects();
-        HYPERION.~BaseObjects();
+        
     }
 
     waitUntilKeyPressed();
