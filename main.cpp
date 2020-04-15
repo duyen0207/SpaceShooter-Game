@@ -16,35 +16,38 @@ int main(int argc, char* argv[]){
     BaseObjects g_background;
     Spaceship HYPERION;
 
-    g_background.loadImg("images//galaxy2.jpg", renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
-    HYPERION.loadObject("images//spaceship.png", renderer);	
+    g_background.loadImg("images//galaxy.png", renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
+    HYPERION.loadObject("images//spaceship.png", renderer);
 
-    while(true){
-	    
-        g_background.render(renderer, 0, 0);
-        
+    int scrollingOffset=0;
+    bool quit = false;
+    while(!quit)
+    {
+        while( SDL_PollEvent( &e ) != 0 )
+        {
+            if( e.type == SDL_QUIT ){
+                quit=true;
+            }
+            HYPERION.pressKeyToMove(e);
+        }
+    //Scroll background
+        scrollingOffset++;
+        if( scrollingOffset > SCREEN_HEIGHT ){
+            scrollingOffset = 0;
+        }
+            //Clear screen
+        SDL_RenderClear( renderer );
+
+        //Render background
+        g_background.render(renderer, 0, scrollingOffset - SCREEN_HEIGHT);
+
+        g_background.render(renderer, 0, scrollingOffset);
+
         HYPERION.show(renderer, HYPERION.x_, HYPERION.y_);
+
         SDL_RenderPresent(renderer);
 
-        SDL_RenderClear(renderer);
-
-        SDL_Delay(10);
-
-        if ( SDL_PollEvent(&e) == 0) continue;
-        if (e.type == SDL_QUIT) break;
-        if (e.type == SDL_KEYDOWN) {
-        	switch (e.key.keysym.sym) {
-        		case SDLK_ESCAPE:break;
-        		case SDLK_LEFT:HYPERION.moveLeft(); break;
-        		case SDLK_RIGHT:HYPERION.moveRight(); break;
-            		case SDLK_DOWN:HYPERION.moveDown(); break;
-            		case SDLK_UP:HYPERION.moveUp(); break;
-        		default: break;
-			}
-        }
-        
     }
-
     waitUntilKeyPressed();
     quitSDL(window, renderer);
     return 0;

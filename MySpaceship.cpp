@@ -21,8 +21,7 @@ void Spaceship::show(SDL_Renderer* des, int& _x, int& _y){
 }
 
 void Spaceship::pressKeyToMove(SDL_Event e){
-    ob_rect.x=x_;
-    ob_rect.y=y_;
+
     if (e.type == SDL_KEYDOWN) {
         switch (e.key.keysym.sym) {
             case SDLK_ESCAPE:break;

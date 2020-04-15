@@ -5,8 +5,8 @@
 #include "BaseFunctions.h"
 #include "BaseObject.h"
 
-const int SHIP_WIDTH = 64;
-const int SHIP_HEIGHT = 64;
+const int SHIP_WIDTH = 80;
+const int SHIP_HEIGHT = 80;
 
 struct Spaceship: public BaseObjects
 {
@@ -21,14 +21,10 @@ struct Spaceship: public BaseObjects
 
     void pressKeyToMove(SDL_Event e);
 
-    void moveLeft(){ x_-=5;}
-    void moveRight(){ x_+=5;}
-    void moveUp(){ y_-=5;}
-    void moveDown(){ y_+=5;}
-
-    bool inside(int minX, int minY, int maxX, int maxY){
-        return (minX<=x_ && minY<=y_ && x_+SHIP_WIDTH<=maxX && y_+SHIP_HEIGHT<=maxY);
-    }
+    void moveLeft(){ x_-=5; if(x_<0) x_+=5;}
+    void moveRight(){ x_+=5; if(x_>SCREEN_WIDTH-SHIP_WIDTH) x_-=5;}
+    void moveUp(){ y_-=5; if(y_<0) y_+=5;}
+    void moveDown(){ y_+=5; if(y_>SCREEN_HEIGHT-SHIP_HEIGHT) y_-=5;}
 };
 
 #endif // SPACE_SHIP_h

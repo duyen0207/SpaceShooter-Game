@@ -43,4 +43,3 @@ void BaseObjects::render(SDL_Renderer* des, int _x, int _y){
     SDL_RenderCopy(des, object, NULL, &newRect);
 }
 
-
