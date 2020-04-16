@@ -30,7 +30,7 @@ int main(int argc, char* argv[]){
             }
             HYPERION.pressKeyToMove(e);
         }
-    //Scroll background
+        //Scroll background
         scrollingOffset++;
         if( scrollingOffset > SCREEN_HEIGHT ){
             scrollingOffset = 0;
@@ -42,8 +42,10 @@ int main(int argc, char* argv[]){
         g_background.render(renderer, 0, scrollingOffset - SCREEN_HEIGHT);
 
         g_background.render(renderer, 0, scrollingOffset);
-
+        //Render spaceship
         HYPERION.show(renderer, HYPERION.x_, HYPERION.y_);
+
+        HYPERION.HandleBullet(renderer);
 
         SDL_RenderPresent(renderer);
 

@@ -35,6 +35,8 @@
 		<Unit filename="BaseFunctions.h" />
 		<Unit filename="BaseObject.cpp" />
 		<Unit filename="BaseObject.h" />
+		<Unit filename="Bullets.cpp" />
+		<Unit filename="Bullets.h" />
 		<Unit filename="MySpaceship.cpp" />
 		<Unit filename="MySpaceship.h" />
 		<Unit filename="main.cpp" />
