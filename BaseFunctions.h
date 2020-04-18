@@ -5,6 +5,7 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include <string>
+#include <ctime>
 using namespace std;
 
 const int SCREEN_WIDTH = 500;

@@ -1,7 +1,7 @@
 #include "BaseFunctions.h"
 #include "BaseObject.h"
 #include "MySpaceship.h"
-
+#include "EnemiesShip.h"
 
 SDL_Window* window = NULL;
 SDL_Renderer* renderer = NULL;
@@ -15,9 +15,11 @@ int main(int argc, char* argv[]){
 
     BaseObjects g_background;
     Spaceship HYPERION;
+    Enemies e_ship;
 
     g_background.loadImg("images//galaxy.png", renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
-    HYPERION.loadObject("images//spaceship.png", renderer);
+    HYPERION.loadImg("images//spaceship.png", renderer, SHIP_WIDTH, SHIP_HEIGHT);
+    e_ship.loadImg("images//r.jpg", renderer, E_WIDTH, E_HEIGHT);
 
     int scrollingOffset=0;
     bool quit = false;
@@ -43,9 +45,12 @@ int main(int argc, char* argv[]){
 
         g_background.render(renderer, 0, scrollingOffset);
         //Render spaceship
-        HYPERION.show(renderer, HYPERION.x_, HYPERION.y_);
+        HYPERION.render(renderer, HYPERION.x_, HYPERION.y_);
 
         HYPERION.HandleBullet(renderer);
+
+        e_ship.render(renderer, e_ship.x_e, e_ship.y_e);
+        e_ship.HandleMove(SCREEN_WIDTH, SCREEN_HEIGHT);
 
         SDL_RenderPresent(renderer);
 
