@@ -9,7 +9,7 @@
 
 const int SHIP_WIDTH = 80;
 const int SHIP_HEIGHT = 80;
-const int step=10;
+const int step=15;
 
 struct Spaceship: public BaseObjects
 {
@@ -20,9 +20,6 @@ struct Spaceship: public BaseObjects
 
     Spaceship();
     ~Spaceship();
-
-    void loadObject(string path, SDL_Renderer* renderer);
-    void show(SDL_Renderer* des, int& _x, int& _y);
 
     void pressKeyToMove(SDL_Event e);
     void HandleBullet(SDL_Renderer* des);

@@ -14,14 +14,6 @@ Spaceship::~Spaceship(){
 
 }
 
-void Spaceship::loadObject(string path, SDL_Renderer* screen){
-    BaseObjects::loadImg(path, screen, SHIP_WIDTH, SHIP_HEIGHT);
-}
-
-void Spaceship::show(SDL_Renderer* des, int& _x, int& _y){
-    BaseObjects::render(des, _x, _y);
-}
-
 void Spaceship::pressKeyToMove(SDL_Event e){
 
     if (e.type == SDL_KEYDOWN) {
