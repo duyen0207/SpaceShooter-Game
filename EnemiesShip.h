@@ -3,19 +3,22 @@
 
 #include "BaseFunctions.h"
 #include "BaseObject.h"
+#include "Bullets.h"
 
 const int E_WIDTH = 90;
 const int E_HEIGHT = 70;
-const int step_e=4;
+const int step_e=2;
 
 struct Enemies : public BaseObjects{
     int x_e;
     int y_e;
+    Bullet e_bullet;
 
     Enemies();
     ~Enemies();
 
     void HandleMove(const int& x_max, const int& y_max);
+    void shoot(SDL_Renderer* renderer, const int& x_max, const int& y_max);
     void HandleInputAction(SDL_Event e);
 
 };

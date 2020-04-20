@@ -30,7 +30,7 @@ int main(int argc, char* argv[]){
             if( e.type == SDL_QUIT ){
                 quit=true;
             }
-            HYPERION.pressKeyToMove(e);
+            HYPERION.InputAction(e, renderer);
         }
         //Scroll background
         scrollingOffset++;
@@ -47,11 +47,13 @@ int main(int argc, char* argv[]){
         //Render spaceship
         HYPERION.render(renderer, HYPERION.x_, HYPERION.y_);
 
-        HYPERION.HandleBullet(renderer);
+        //Shoot bullets
+        HYPERION.shoot(renderer);
 
+        //enemy
         e_ship.render(renderer, e_ship.x_e, e_ship.y_e);
         e_ship.HandleMove(SCREEN_WIDTH, SCREEN_HEIGHT);
-
+        //present on screen
         SDL_RenderPresent(renderer);
 
     }

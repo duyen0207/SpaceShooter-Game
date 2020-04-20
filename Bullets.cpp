@@ -7,7 +7,7 @@ Bullet::Bullet(){
     ob_rect.w = 0;
     x_b = 0;
     y_b = 0;
-
+    is_move=false;
 }
 
 Bullet::~Bullet(){
@@ -19,10 +19,11 @@ void Bullet::after_get_power(){
 }
 
 void Bullet::move_b(const int& width, const int& height, const bool direction){
+    //direction = true->move down to up, false-> up to down
     if(direction){y_b-=step_b;}
     else if(!direction){y_b+=step_b;}
     if(y_b<0 || y_b>height || x_b<0 || x_b>width){
-        objectFree();
+        is_move=false;
     }
 }
 

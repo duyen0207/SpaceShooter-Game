@@ -16,13 +16,14 @@ struct Spaceship: public BaseObjects
     int x_=300;
     int y_=500;
 
-    Bullet bullet_ship;
+    vector<Bullet*> bullet_list;
 
     Spaceship();
     ~Spaceship();
 
-    void pressKeyToMove(SDL_Event e);
-    void HandleBullet(SDL_Renderer* des);
+    void InputAction(SDL_Event e, SDL_Renderer* renderer);
+    //BULLET
+    void shoot(SDL_Renderer* renderer);
 
     void moveLeft(){ x_-=step; if(x_<0) x_+=step;}
     void moveRight(){ x_+=step; if(x_>SCREEN_WIDTH-SHIP_WIDTH) x_-=step;}
