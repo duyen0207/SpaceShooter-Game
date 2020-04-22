@@ -14,14 +14,28 @@ Spaceship::~Spaceship(){
 
 void Spaceship::InputAction(SDL_Event e, SDL_Renderer* renderer){
 
-    if (e.type == SDL_KEYDOWN) {
-        switch (e.key.keysym.sym) {
-            case SDLK_ESCAPE:break;
-            case SDLK_LEFT:     moveLeft(); break;
-            case SDLK_RIGHT:    moveRight(); break;
-            case SDLK_DOWN:     moveDown(); break;
-            case SDLK_UP:       moveUp(); break;
-            default: break;
+    //If a key was pressed
+	if( e.type == SDL_KEYDOWN && e.key.repeat == 0 )
+    {
+        //Adjust the velocity
+        switch( e.key.keysym.sym )
+        {
+            case SDLK_UP: v_y -= step; break;
+            case SDLK_DOWN: v_y += step; break;
+            case SDLK_LEFT: v_x -= step; break;
+            case SDLK_RIGHT: v_x += step; break;
+        }
+    }
+    //If a key was released
+    else if( e.type == SDL_KEYUP && e.key.repeat == 0 )
+    {
+        //Adjust the velocity
+        switch( e.key.keysym.sym )
+        {
+            case SDLK_UP: v_y += step; break;
+            case SDLK_DOWN: v_y -= step; break;
+            case SDLK_LEFT: v_x += step; break;
+            case SDLK_RIGHT: v_x -= step; break;
         }
     }
     else if(e.type == SDL_MOUSEBUTTONDOWN){
@@ -33,6 +47,15 @@ void Spaceship::InputAction(SDL_Event e, SDL_Renderer* renderer){
             bullet_list.push_back(a_bullet);
         }
     }
+}
+
+void Spaceship::move(){
+    x_+=v_x;
+    y_+=v_y;
+    if(x_<0) x_+=step;
+    if(x_>SCREEN_WIDTH-SHIP_WIDTH) x_-=step;
+    if(y_<0) y_+=step;
+    if(y_>SCREEN_HEIGHT-SHIP_HEIGHT) y_-=step;
 }
 
 void Spaceship::shoot(SDL_Renderer* renderer){
@@ -50,5 +73,6 @@ void Spaceship::shoot(SDL_Renderer* renderer){
                     }
                 }
             }
-        }
+    }
 }
+

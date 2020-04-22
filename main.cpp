@@ -45,6 +45,7 @@ int main(int argc, char* argv[]){
 
         g_background.render(renderer, 0, scrollingOffset);
         //Render spaceship
+        HYPERION.move();
         HYPERION.render(renderer, HYPERION.x_, HYPERION.y_);
 
         //Shoot bullets

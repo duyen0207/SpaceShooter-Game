@@ -9,12 +9,13 @@
 
 const int SHIP_WIDTH = 80;
 const int SHIP_HEIGHT = 80;
-const int step=15;
 
 struct Spaceship: public BaseObjects
 {
     int x_=300;
     int y_=500;
+    int v_x=0, v_y=0;
+    const int step=5;
 
     vector<Bullet*> bullet_list;
 
@@ -22,13 +23,9 @@ struct Spaceship: public BaseObjects
     ~Spaceship();
 
     void InputAction(SDL_Event e, SDL_Renderer* renderer);
+    void move();
     //BULLET
     void shoot(SDL_Renderer* renderer);
-
-    void moveLeft(){ x_-=step; if(x_<0) x_+=step;}
-    void moveRight(){ x_+=step; if(x_>SCREEN_WIDTH-SHIP_WIDTH) x_-=step;}
-    void moveUp(){ y_-=step; if(y_<0) y_+=step;}
-    void moveDown(){ y_+=step; if(y_>SCREEN_HEIGHT-SHIP_HEIGHT) y_-=step;}
 };
 
 #endif // SPACE_SHIP_h
