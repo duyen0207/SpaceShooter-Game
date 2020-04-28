@@ -7,9 +7,9 @@
 
 const int E_WIDTH = 90;
 const int E_HEIGHT = 70;
-const int step_e=2;
+const int step_e=5;
 
-struct Enemies : public BaseObjects{
+struct Enemies : BaseObjects{
     int x_e;
     int y_e;
     Bullet e_bullet;

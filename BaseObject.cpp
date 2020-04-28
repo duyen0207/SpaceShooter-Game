@@ -39,7 +39,40 @@ void BaseObjects::loadImg(string path, SDL_Renderer* screen, const int WIDTH, co
 void BaseObjects::render(SDL_Renderer* des, int _x, int _y){
     ob_rect.x=_x;
     ob_rect.y=_y;
-    SDL_Rect newRect ={ob_rect.x, ob_rect.y, ob_rect.w, ob_rect.h};
-    SDL_RenderCopy(des, object, NULL, &newRect);
+    SDL_RenderCopy(des, object, NULL, &ob_rect);
 }
 
+bool BaseObjects::checkCollision(const SDL_Rect& other_rect){
+    int left_this=ob_rect.x;
+    int right_this=ob_rect.x+ob_rect.w;
+    int top_this=ob_rect.y;
+    int bottom_this=ob_rect.y+ob_rect.h;
+
+    int left_other= other_rect.x+10;
+    int right_other= other_rect.x+ other_rect.w-10;
+    int top_other= other_rect.y+other_rect.h/3;
+    int bottom_other= other_rect.y+other_rect.h*0.67;
+
+    if( bottom_this < top_other )
+    {
+        return false;
+    }
+
+    if( top_this > bottom_other )
+    {
+        return false;
+    }
+
+    if( right_this < left_other )
+    {
+        return false;
+    }
+
+    if( left_this > right_other )
+    {
+        return false;
+    }
+
+    return true;
+
+}

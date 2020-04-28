@@ -76,3 +76,6 @@ void Spaceship::shoot(SDL_Renderer* renderer){
     }
 }
 
+void Spaceship::destroy(const int& i_bullet){
+
+}

@@ -12,7 +12,7 @@ const int ROUND_HEIGHT = 30;
 
 const int step_b=6;  //speed of bullet
 
-struct Bullet : public BaseObjects
+struct Bullet : BaseObjects
 {
     int x_b;
     int y_b;
