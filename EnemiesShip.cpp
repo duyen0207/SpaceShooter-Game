@@ -22,7 +22,7 @@ void Enemies::HandleMove(const int& x_max, const int& y_max){
 }
 
 
-void Enemies::HandleInputAction(SDL_Event e){
+void Enemies::HandleInputAction(SDL_Event &e){
 
 }
 

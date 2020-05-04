@@ -19,7 +19,7 @@ struct Enemies : BaseObjects{
 
     void HandleMove(const int& x_max, const int& y_max);
     void shoot(SDL_Renderer* renderer, const int& x_max, const int& y_max);
-    void HandleInputAction(SDL_Event e);
+    void HandleInputAction(SDL_Event &e);
 
 };
 

@@ -41,6 +41,8 @@
 		<Unit filename="EnemiesShip.h" />
 		<Unit filename="MySpaceship.cpp" />
 		<Unit filename="MySpaceship.h" />
+		<Unit filename="Text.cpp" />
+		<Unit filename="Text.h" />
 		<Unit filename="main.cpp" />
 		<Extensions>
 			<code_completion />

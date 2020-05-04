@@ -21,22 +21,20 @@ void BaseObjects::objectFree(){
     }
 }
 
-void BaseObjects::loadImg(string path, SDL_Renderer* screen, const int WIDTH, const int HEIGHT){
-    SDL_Texture* newTexture = NULL;
+void BaseObjects::loadImg(string path, SDL_Renderer* &screen, const int WIDTH, const int HEIGHT){
     SDL_Surface* newSurface =IMG_Load(path.c_str());
     if(newSurface != NULL){
         SDL_SetColorKey(newSurface, SDL_TRUE, SDL_MapRGB(newSurface->format, RED, GREEN, BLUE));
-        newTexture = SDL_CreateTextureFromSurface(screen, newSurface);
-        if(newTexture!=NULL){
+        object = SDL_CreateTextureFromSurface(screen, newSurface);
+        if(object!=NULL){
             ob_rect.w=WIDTH;   // save size of character.
             ob_rect.h=HEIGHT;
-        }else if(newTexture==NULL){cout<<"Can't find the path of the image."<<endl;}
+        }else if(object==NULL){cout<<"Can't find the path of the image."<<endl;}
         SDL_FreeSurface(newSurface);
     }
-    object=newTexture;
 }
 
-void BaseObjects::render(SDL_Renderer* des, int _x, int _y){
+void BaseObjects::render(SDL_Renderer* &des, int _x, int _y){
     ob_rect.x=_x;
     ob_rect.y=_y;
     SDL_RenderCopy(des, object, NULL, &ob_rect);

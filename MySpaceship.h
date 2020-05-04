@@ -22,10 +22,10 @@ struct Spaceship : BaseObjects
     Spaceship();
     ~Spaceship();
 
-    void InputAction(SDL_Event e, SDL_Renderer* renderer);
+    void InputAction(SDL_Event &e, SDL_Renderer* &renderer);
     void move();
     //BULLET
-    void shoot(SDL_Renderer* renderer);
+    void shoot(SDL_Renderer* &renderer);
     void destroy(const int& i_bullet);
 };
 
