@@ -12,7 +12,7 @@ Spaceship::~Spaceship(){
 
 }
 
-void Spaceship::InputAction(SDL_Event e, SDL_Renderer* renderer){
+void Spaceship::InputAction(SDL_Event &e, SDL_Renderer* &renderer){
 
     //If a key was pressed
 	if( e.type == SDL_KEYDOWN && e.key.repeat == 0 )
@@ -58,7 +58,7 @@ void Spaceship::move(){
     if(y_>SCREEN_HEIGHT-SHIP_HEIGHT) y_-=step;
 }
 
-void Spaceship::shoot(SDL_Renderer* renderer){
+void Spaceship::shoot(SDL_Renderer* &renderer){
     for(int i=0; i<bullet_list.size(); i++){
             Bullet* ptr_b= bullet_list.at(i);
             if(ptr_b!=NULL){
