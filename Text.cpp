@@ -14,7 +14,7 @@ A_Text::~A_Text(){
     }
 }
 
-void A_Text::LoadFromRenderTexture(TTF_Font* font, SDL_Renderer* screen){
+void A_Text::LoadFromRenderTexture(TTF_Font* &font, SDL_Renderer* &screen){
     SDL_Surface* print_text = TTF_RenderText_Solid(font, name.c_str(), text_color);
     if(print_text!=NULL){
         texture=SDL_CreateTextureFromSurface(screen, print_text);
@@ -32,7 +32,7 @@ void A_Text::set_color(Uint8 red, Uint8 green, Uint8 blue){
     text_color.b=blue;
 }
 
-void A_Text::renderText( SDL_Renderer* renderer, int x, int y, SDL_Rect* clip, double angle, SDL_Point* center, SDL_RendererFlip flip )
+void A_Text::renderText( SDL_Renderer* &renderer, int x, int y, SDL_Rect* clip, double angle, SDL_Point* center, SDL_RendererFlip flip )
 {
 	//Set rendering space and render to screen
 	SDL_Rect renderQuad = { x, y, width, height };

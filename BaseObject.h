@@ -15,7 +15,8 @@ struct BaseObjects {
 
     void loadImg(string path, SDL_Renderer* &screen, const int WIDTH, const int HEIGHT); //save image to a texture
     void render(SDL_Renderer* &des, int _x, int _y);  //apply texture to screen with its location
-    bool checkCollision(const SDL_Rect& other_rect);
+    bool spac_checkCollision(const SDL_Rect& other_rect);
+    bool blt_checkCollision(const SDL_Rect& other_rect);
     void objectFree(); //free pointer
 };
 #endif // Base_Object_h

@@ -7,6 +7,7 @@ SDL_Window* window = NULL;
 SDL_Renderer* renderer = NULL;
 TTF_Font* g_font=NULL;
 Mix_Music* g_music=NULL;
+Mix_Chunk* ship_die=NULL;
 SDL_Event e;
 
 int main(int argc, char* argv[]){
@@ -17,25 +18,29 @@ int main(int argc, char* argv[]){
     BaseObjects g_background;
     g_background.loadImg("images//galaxy.png", renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
     int scrollingOffset=0;
-
-    A_Text g_time;
-    g_time.set_color(0,255,255);
+    //score of player
+    A_Text g_score;
+    g_score.set_color(0,255,255);
+    Uint32 mark=0;
     //background music
     load_mp3_sound(g_music, "sound_effect//background_music.mp3");
 
 //characters//
     Spaceship HYPERION;
-    Enemies e_ship;
-
+    int num_life=3;
+    load_wav_sound(ship_die, "sound_effect//bum.wav");
     HYPERION.loadImg("images//spaceship.png", renderer, SHIP_WIDTH, SHIP_HEIGHT);
-    e_ship.loadImg("images//r.jpg", renderer, E_WIDTH, E_HEIGHT);
+
+    Enemies e_ship;
+    e_ship.loadImg("images//aaa.png", renderer, E_WIDTH, E_HEIGHT);
+
 //play game//
     bool quit = false;
     while(!quit)
     {
         //Clear screen
         SDL_RenderClear( renderer );
-    //GAME BACKGROUND//
+//GAME BACKGROUND//
         //Scroll background
         scrollingOffset+=2;
         if( scrollingOffset > SCREEN_HEIGHT ){
@@ -45,22 +50,21 @@ int main(int argc, char* argv[]){
         g_background.render(renderer, 0, scrollingOffset - SCREEN_HEIGHT);
         g_background.render(renderer, 0, scrollingOffset);
 
-        //If there is no music playing
+        ////Play the music
         if( Mix_PlayingMusic() == 0 )
-        {   //Play the music
+        {
             Mix_PlayMusic( g_music, -1 );
         }
-
         //time
-        string time="Time: ";
         Uint32 time_val=SDL_GetTicks()/1000;
+        //Score
+        string str_mark="Score: ";
+        string mark_val=to_string(mark);
+        str_mark+=mark_val;//connect Score with mark value -> a string
 
-        string gtime=to_string(time_val);
-        time+=gtime;
-
-        g_time.name=time;
-        g_time.LoadFromRenderTexture(g_font, renderer);
-        g_time.renderText(renderer, 2, 10);
+        g_score.name=str_mark;
+        g_score.LoadFromRenderTexture(g_font, renderer);
+        g_score.renderText(renderer, 2, 10);
     ///////////////////////////////////////////////////////////////////////
         while( SDL_PollEvent( &e ) != 0 )
         {
@@ -69,10 +73,8 @@ int main(int argc, char* argv[]){
             }
             HYPERION.InputAction(e, renderer);
         }
-
-
         //enemy
-        if(time_val>30){
+        if(time_val>10){
             e_ship.HandleMove(SCREEN_WIDTH, SCREEN_HEIGHT);
             e_ship.render(renderer, e_ship.x_e, e_ship.y_e);
         }
@@ -82,14 +84,27 @@ int main(int argc, char* argv[]){
         HYPERION.render(renderer, HYPERION.x_, HYPERION.y_);
         //Shoot bullets
         HYPERION.shoot(renderer);
+        //check collision between bullets and enemy
+        for(int k=0; k<HYPERION.bullet_list.size(); k++){
+            Bullet* b_col= HYPERION.bullet_list.at(k);
+            if(b_col->blt_checkCollision(e_ship.ob_rect)){
+                mark++;
+                b_col->is_move=false;
+                e_ship.set_position();
 
+                HYPERION.bullet_list.erase(HYPERION.bullet_list.begin()+k);
+                if(b_col!=NULL){
+                    delete b_col;
+                    b_col=NULL;
+                }
+            }
+        }
         //check collision between spaceship and enemy
-        if(HYPERION.checkCollision(e_ship.ob_rect)){
+        if(HYPERION.spac_checkCollision(e_ship.ob_rect)){
+            Mix_PlayChannel( -1, ship_die, 0 );
             cout<<endl<<endl<<"   GAME OVER!"<<endl;
             quit=true;
         }
-        //check collision between bullets and enemy
-
 
         //present on screen
         SDL_RenderPresent(renderer);

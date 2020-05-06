@@ -33,7 +33,7 @@ void waitUntilKeyPressed();
 //////////////////////////////////////////
 
 void load_mp3_sound(Mix_Music* &g_music, const char* m_path);
-
+void load_wav_sound(Mix_Chunk* &g_sound, const char* w_path);
 
 
 #endif // Base_Functions_h

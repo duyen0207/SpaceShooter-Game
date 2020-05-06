@@ -71,3 +71,11 @@ void load_mp3_sound(Mix_Music* &g_music, const char* m_path){
     }
 }
 
+void load_wav_sound(Mix_Chunk* &g_sound, const char* w_path){
+    g_sound= Mix_LoadWAV( w_path );
+	if( g_sound == NULL )
+	{
+		cout<<"Can't find sound."<<endl;
+	}
+}
+
