@@ -12,7 +12,6 @@ Spaceship::~Spaceship(){
 
 }
 
-
 void Spaceship::InputAction(SDL_Event &e, SDL_Renderer* &renderer){
 
     //If a key was pressed
