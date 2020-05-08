@@ -43,8 +43,8 @@ void BaseObjects::render(SDL_Renderer* &des, int _x, int _y){
 bool BaseObjects::spac_checkCollision(const SDL_Rect& other_rect){
     int left_this=ob_rect.x+ob_rect.w*2/5;
     int right_this=ob_rect.x+ob_rect.w*3/5;
-    int top_this=ob_rect.y;
-    int bottom_this=ob_rect.y+ob_rect.h;
+    int top_this=ob_rect.y+ob_rect.h*2/5;
+    int bottom_this=ob_rect.y+ob_rect.h*3/5;
 
     int left_other= other_rect.x+10;
     int right_other= other_rect.x+ other_rect.w-10;

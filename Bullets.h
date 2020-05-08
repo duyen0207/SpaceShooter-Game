@@ -4,13 +4,22 @@
 #include "BaseFunctions.h"
 #include "BaseObject.h"
 
-const int NORMAL_WIDTH = 20;
-const int NORMAL_HEIGHT = 30;
+//level of bullet
+const int B_W=20;
+const int B_H=20;
 
-const int ROUND_WIDTH = 30;
-const int ROUND_HEIGHT = 30;
+const int A_W = 20;
+const int A_H = 30;
 
-const int step_b=6;  //speed of bullet
+const int S_W = 50;
+const int S_H = 50;
+
+const int SS_W =70;
+const int SS_H =70;
+
+//speed of bullet
+const int speed1=6;
+const int speed2=4;
 
 struct Bullet : BaseObjects
 {
@@ -22,7 +31,7 @@ struct Bullet : BaseObjects
     ~Bullet();
 
     void after_get_power();
-    void move_b(const int& width, const int& height, const bool direction);
+    void move_b(const int& width, const int& height, const bool direction, const int speed);
 
 };
 

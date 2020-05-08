@@ -13,7 +13,7 @@
 
 using namespace std;
 
-const int SCREEN_WIDTH = 500;
+const int SCREEN_WIDTH = 600;
 const int SCREEN_HEIGHT = 700;
 const string WINDOW_TITLE = "Space Shooter";
 const int FONT=15;

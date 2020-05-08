@@ -41,7 +41,7 @@ void Spaceship::InputAction(SDL_Event &e, SDL_Renderer* &renderer){
     else if(e.type == SDL_MOUSEBUTTONDOWN){
         if(e.button.button==SDL_BUTTON_LEFT){
             Bullet* a_bullet = new Bullet();
-            a_bullet->loadImg("images//bullet.png", renderer, NORMAL_WIDTH, NORMAL_HEIGHT);
+            a_bullet->loadImg("images//bullet.png", renderer, A_W, A_H);
             a_bullet->x_b=x_+SHIP_WIDTH*0.35; a_bullet->y_b=y_;
             a_bullet->is_move=true;
             bullet_list.push_back(a_bullet);
@@ -63,7 +63,7 @@ void Spaceship::shoot(SDL_Renderer* &renderer){
             Bullet* ptr_b= bullet_list.at(i);
             if(ptr_b!=NULL){
                 if(ptr_b->is_move){
-                    ptr_b->move_b(SCREEN_WIDTH, SCREEN_HEIGHT, true);
+                    ptr_b->move_b(SCREEN_WIDTH, SCREEN_HEIGHT, true, speed1);
                     ptr_b->render(renderer, ptr_b->x_b, ptr_b->y_b);
                 }else{
                     bullet_list.erase(bullet_list.begin()+i);

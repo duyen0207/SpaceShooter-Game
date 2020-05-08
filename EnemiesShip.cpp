@@ -13,14 +13,23 @@ Enemies::~Enemies(){
 
 }
 
-void Enemies::HandleMove(const int& x_max, const int& y_max){
-    y_e+=step_e;
+void Enemies::HandleMove(const int& x_max, const int& y_max, const int speed_e){
+    y_e+=speed_e;
     if(y_e>SCREEN_HEIGHT){
         y_e=-E_HEIGHT;
         x_e=rand()%(SCREEN_WIDTH-E_WIDTH);
     }
 }
 
+void Enemies::shoot(SDL_Renderer* renderer, const int speed){
+    if(!e_bullet.is_move) {
+        e_bullet.x_b=x_e+E_WIDTH/2;
+        e_bullet.y_b=y_e+E_HEIGHT;
+        e_bullet.is_move=true;
+    }
+    e_bullet.move_b(SCREEN_WIDTH, SCREEN_HEIGHT, false, speed);
+    e_bullet.render(renderer, e_bullet.x_b, e_bullet.y_b);
+}
 
 void Enemies::HandleInputAction(SDL_Event &e){
 
