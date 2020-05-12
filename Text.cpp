@@ -15,7 +15,7 @@ A_Text::~A_Text(){
 }
 
 void A_Text::LoadFromRenderTexture(TTF_Font* &font, SDL_Renderer* &screen){
-    SDL_Surface* print_text = TTF_RenderText_Solid(font, name.c_str(), text_color);
+    SDL_Surface* print_text = TTF_RenderText_Solid(font, content.c_str(), text_color);
     if(print_text!=NULL){
         texture=SDL_CreateTextureFromSurface(screen, print_text);
         width=print_text->w;

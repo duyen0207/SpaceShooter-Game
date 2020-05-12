@@ -10,7 +10,12 @@ Enemies::Enemies(){
 }
 
 Enemies::~Enemies(){
+    objectFree();
+}
 
+void Enemies::free_enemies(){
+    this->objectFree();
+    e_bullet.objectFree();
 }
 
 void Enemies::HandleMove(const int& x_max, const int& y_max, const int speed_e){

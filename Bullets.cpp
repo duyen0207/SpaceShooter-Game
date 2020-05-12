@@ -11,7 +11,7 @@ Bullet::Bullet(){
 }
 
 Bullet::~Bullet(){
-
+    objectFree();
 }
 
 void Bullet::after_get_power(){

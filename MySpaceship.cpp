@@ -9,7 +9,7 @@ Spaceship::Spaceship(){
 }
 
 Spaceship::~Spaceship(){
-
+    objectFree();
 }
 
 void Spaceship::InputAction(SDL_Event &e, SDL_Renderer* &renderer){

@@ -4,7 +4,7 @@
 #include "BaseFunctions.h"
 
 struct A_Text{
-    string name;
+    string content;
     SDL_Texture* texture;
     SDL_Color text_color;
     int width;

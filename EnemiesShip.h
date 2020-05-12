@@ -19,6 +19,8 @@ struct Enemies : BaseObjects{
     Enemies();
     ~Enemies();
 
+    void free_enemies();
+
     void set_position(){y_e=-rand()%(SCREEN_HEIGHT); x_e=rand()%(SCREEN_WIDTH-E_WIDTH);}
     void HandleMove(const int& x_max, const int& y_max, const int speed_e);
     void shoot(SDL_Renderer* renderer, const int speed);

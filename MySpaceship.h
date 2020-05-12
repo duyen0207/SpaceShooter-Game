@@ -7,8 +7,8 @@
 #include "Bullets.h"
 #include "EnemiesShip.h"
 
-const int SHIP_WIDTH = 100;
-const int SHIP_HEIGHT = 100;
+const int SHIP_WIDTH = 80;
+const int SHIP_HEIGHT = 80;
 
 struct Spaceship : BaseObjects
 {

@@ -13,10 +13,10 @@
 
 using namespace std;
 
-const int SCREEN_WIDTH = 600;
+const int SCREEN_WIDTH = 480;
 const int SCREEN_HEIGHT = 700;
 const string WINDOW_TITLE = "Space Shooter";
-const int FONT=15;
+const int FONT=18;
 
 const int RED = 255;
 const int GREEN = 255;
@@ -34,6 +34,5 @@ void waitUntilKeyPressed();
 
 void load_mp3_sound(Mix_Music* &g_music, const char* m_path);
 void load_wav_sound(Mix_Chunk* &g_sound, const char* w_path);
-
 
 #endif // Base_Functions_h
