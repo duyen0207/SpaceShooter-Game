@@ -7,22 +7,27 @@ Enemies::Enemies(){
     ob_rect.h=E_HEIGHT;
     x_e = 0;
     y_e = -E_HEIGHT;
+    moveHorizontal=false;
 }
 
 Enemies::~Enemies(){
     objectFree();
 }
 
-void Enemies::free_enemies(){
-    this->objectFree();
-    e_bullet.objectFree();
+void Enemies::set_position(){
+    if(moveHorizontal){
+        y_e=rand()%((SCREEN_HEIGHT-E_WIDTH)/2); x_e=-rand()%SCREEN_WIDTH;
+    }
+    else {y_e=-rand()%(SCREEN_HEIGHT); x_e=rand()%(SCREEN_WIDTH-E_WIDTH);}
 }
 
 void Enemies::HandleMove(const int& x_max, const int& y_max, const int speed_e){
-    y_e+=speed_e;
-    if(y_e>SCREEN_HEIGHT){
-        y_e=-E_HEIGHT;
-        x_e=rand()%(SCREEN_WIDTH-E_WIDTH);
+    if(moveHorizontal){
+        x_e+=speed_e;
+    }
+    else y_e+=speed_e;
+    if(y_e>SCREEN_HEIGHT || x_e>SCREEN_WIDTH){
+        set_position();
     }
 }
 

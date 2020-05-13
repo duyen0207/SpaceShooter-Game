@@ -1,6 +1,7 @@
 #include "BaseFunctions.h"
 #include "MySpaceship.h"
 #include "EnemiesShip.h"
+#include "Support_items.h"
 #include "Text.h"
 
 SDL_Window* window = NULL;
@@ -13,19 +14,20 @@ SDL_Event e;
     BaseObjects g_background;
     BaseObjects g_menu;
     BaseObjects g_menu_end;
-        BaseObjects text_in_the_end;
-
-    Spaceship HYPERION;
-    Enemies e_ship[num_enemy];
-    BaseObjects diamonds[10];
-        //additional elements
-        bool win=false;
-        bool quit = false;
-        int scrollingOffset=0;
-        A_Text g_score;
-        Uint32 mark=0;
-        Uint32 highest_score=mark;
-        int num_life=1;
+    BaseObjects text_in_the_end;
+            //CHARACTERS AND ITEMS
+            Spaceship HYPERION;
+            Enemies e_ship[num_enemy];
+            Reward diamonds[num_diamonds];
+            Reward Life;
+            Reward Power[num_power];
+                //additional elements
+                bool win=false;
+                bool quit = false;
+                int scrollingOffset=0;
+                A_Text g_score; Uint32 mark=0;
+                BaseObjects NUM_DIAMONDS; A_Text amount_diamonds; Uint32 amount_d=0;
+                int count_life=1;
 
 bool Menu_Game();
 void load_game_elements();
@@ -44,7 +46,6 @@ int main(int argc, char* argv[]){
     initSDL(window, renderer, g_font, SCREEN_WIDTH, SCREEN_HEIGHT, WINDOW_TITLE);
 
     Play_Game();
-    End_Game();
 
     close();
     quitSDL(window, renderer);
@@ -92,28 +93,57 @@ void load_game_elements(){
     g_background.loadImg("images//galaxy.png", renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
     load_mp3_sound(g_music, "sound_effect//background_music.mp3");
     load_wav_sound(ship_die, "sound_effect//bum.wav");
-
+    //SCORE
     g_score.set_color(0,255,255);
-    //rewards
-    for(int r=0; r<10; r++){
-        diamonds[r].loadImg("images//tinh_thach.png", renderer, 40, 40);
-    }
+    NUM_DIAMONDS.loadImg("images//tinh_thach.png", renderer, DIAMOND_WEIGHT, DIAMOND_HEIGHT);
+    amount_diamonds.set_color(0, 255, 255);
+        //REWARD
+        Life.loadImg("images//support_life.png", renderer, LIFE_WEIGHT, LIFE_HEIGHT);
+        for(int p=0; p<num_power; p++){
+            Power[p].loadImg("images//power.png", renderer, POWER_WEIGHT, POWER_HEIGHT);
+        }
+        for(int r=0; r<num_diamonds; r++){
+            diamonds[r].loadImg("images//tinh_thach.png", renderer, DIAMOND_WEIGHT, DIAMOND_HEIGHT);
+            diamonds[r].set_position_r(SCREEN_WIDTH/2, -(r+1)*(DIAMOND_HEIGHT+5));
+        }
+
     //spaceship
     HYPERION.loadImg("images//spaceship.png", renderer, SHIP_WIDTH, SHIP_HEIGHT);
     //enemies
     for(int e=0; e<num_enemy; e++){
         e_ship[e].loadImg("images//aaa.png", renderer, E_WIDTH, E_HEIGHT);
+        e_ship[e].set_position();
         e_ship[e].e_bullet.loadImg("images//e_bullet.png", renderer, B_W, B_H);
     }
 }
 
 void object_appear(Uint32 &time){
+
     if(time>5){
         for(int ee=0; ee<num_enemy; ee++){
             e_ship[ee].HandleMove(SCREEN_WIDTH, SCREEN_HEIGHT, speed_e);
             e_ship[ee].render(renderer, e_ship[ee].x_e, e_ship[ee].y_e);
             e_ship[ee].shoot(renderer, speed2);
         }
+    }
+    if((time>30 && time<100)||(time>250 && time<320)){
+        for(int ee=0; ee<num_enemy; ee++){
+            if(time%15==0){e_ship[ee].moveHorizontal=true;}
+            else e_ship[ee].moveHorizontal=false;
+        }
+    }
+    int _x=rand()%(SCREEN_WIDTH-DIAMOND_WEIGHT);
+
+    if((time>10 && time <50) || (time>100 && time<300)){
+        for(int dd=0; dd<num_diamonds; dd++){
+            diamonds[dd].simple_move(_x);
+            diamonds[dd].render(renderer, diamonds[dd].ob_rect.x, diamonds[dd].ob_rect.y);
+        }
+    }
+
+    if((time>30&&time<45) || (time>150&&time<200) || (time>250&&time<280)){
+        Life.simple_move(_x);
+        Life.render(renderer, Life.ob_rect.x, Life.ob_rect.y);
     }
 }
 
@@ -147,6 +177,11 @@ void Play_Game(){
             g_score.content=str_mark;
             g_score.LoadFromRenderTexture(g_font, renderer);
             g_score.renderText(renderer, 2, 10);
+            //DIAMONDS
+            NUM_DIAMONDS.render(renderer, 300, 10);
+            amount_diamonds.content=to_string(amount_d);
+            amount_diamonds.LoadFromRenderTexture(g_font, renderer);
+            amount_diamonds.renderText(renderer, 340, 10);
         ///////////////////////////////////////////////////////////////////////
             while( SDL_PollEvent( &e ) != 0 )
             {
@@ -161,6 +196,21 @@ void Play_Game(){
             HYPERION.move();
             HYPERION.render(renderer, HYPERION.x_, HYPERION.y_);
             HYPERION.shoot(renderer);
+
+            //collect reward
+            if(count_life>=1){
+                if(Life.blt_checkCollision(HYPERION.ob_rect)){
+                    Life.set_position_r(SCREEN_WIDTH/time_val);
+                    count_life++;
+                    cout<<"Your number of lifes: "<<count_life<<endl;
+                }
+                for(int d_c=0; d_c<num_diamonds; d_c++){
+                    if(diamonds[d_c].blt_checkCollision(HYPERION.ob_rect)){
+                        diamonds[d_c].set_position_r(SCREEN_WIDTH/3, -(d_c+1)*(DIAMOND_WEIGHT+10));
+                        amount_d++;
+                    }
+                }
+            }
             //check collision between spaceship, bullets and enemy
             for(int e_c=0; e_c<num_enemy; ++e_c){
                 //bullet of spaceship and enemies
@@ -180,17 +230,20 @@ void Play_Game(){
                 }
                 //spaceship and enemies/bullet of enemy
                 if(HYPERION.spac_checkCollision(e_ship[e_c].ob_rect) || HYPERION.spac_checkCollision(e_ship[e_c].e_bullet.ob_rect)){
-                    if(mark>highest_score) highest_score=mark;
+                    e_ship[e_c].set_position();
+                    e_ship[e_c].set_bullet_position();
                     Mix_PlayChannel( -1, ship_die, 0 );
-                    num_life--;
-
+                    count_life--;
+                    cout<<"Your number of lifes: "<<count_life<<endl;
                 }
-                if(num_life<1){
+                if(count_life<1){
                     cout<<endl<<endl<<"   GAME OVER!"<<endl<<endl<<"Your score is: "<<mark<<endl;
                     quit=true;
+                    End_Game();
                     break;
                 }
             }
+
             SDL_RenderPresent(renderer);
         }
     }
@@ -224,7 +277,6 @@ void End_Game(){
     }
 
 }
-
 void close(){
 
     //Free the music

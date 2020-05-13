@@ -10,16 +10,22 @@ const int LIFE_HEIGHT=30;
 const int POWER_WEIGHT=70;
 const int POWER_HEIGHT=30;
 
-const int DIAMOND_WEIGHT=50;
-const int DIAMOND_HEIGHT=50;
+const int DIAMOND_WEIGHT=30;
+const int DIAMOND_HEIGHT=30;
+
+const int num_diamonds=10;
+const int num_power=2;
 
 struct Reward : BaseObjects{
-    bool is_move;
+    int speed_r;
+    bool move_cross;
 
     Reward();
     ~Reward();
 
-    void simple_move();
+    void set_speed(const int sp){speed_r=sp;}
+    void set_position_r(int position_x, int position_y=-(rand()%SCREEN_HEIGHT)){ob_rect.x=position_x; ob_rect.y=position_y;}
+    void simple_move(const int type_w);
 };
 
 #endif // SUPPORT_ITEMS_h
