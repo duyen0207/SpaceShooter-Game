@@ -18,25 +18,23 @@ SDL_Event e;
             //CHARACTERS AND ITEMS
             Spaceship HYPERION;
             Enemies e_ship[num_enemy];
-            Reward diamonds[num_diamonds];
-            Reward Life;
-            Reward Power[num_power];
+            Enemies ENEMY_LV_S; Bullet bullets_boss[num_bullet_of_boss];
+
+            Reward coins[num_coins]; BaseObjects NUM_COINS; A_Text amount_coins; Uint32 amount_c=0;
+            Reward Life; int count_life=1;
+            Reward Power; int collected_power=0;
                 //additional elements
                 bool win=false;
                 bool quit = false;
                 int scrollingOffset=0;
                 A_Text g_score; Uint32 mark=0;
-                BaseObjects NUM_DIAMONDS; A_Text amount_diamonds; Uint32 amount_d=0;
-                int count_life=1;
 
 bool Menu_Game();
 void load_game_elements();
 void object_appear(Uint32 &time); //manage time for appearance of types of objects
 
-
 void Play_Game();
 void End_Game();
-
 
 void close();//to free all elements in game
 
@@ -95,21 +93,21 @@ void load_game_elements(){
     load_wav_sound(ship_die, "sound_effect//bum.wav");
     //SCORE
     g_score.set_color(0,255,255);
-    NUM_DIAMONDS.loadImg("images//tinh_thach.png", renderer, DIAMOND_WEIGHT, DIAMOND_HEIGHT);
-    amount_diamonds.set_color(0, 255, 255);
+    NUM_COINS.loadImg("images//money.png", renderer, COIN_WEIGHT, COIN_HEIGHT);
+    amount_coins.set_color(0, 255, 255);
         //REWARD
         Life.loadImg("images//support_life.png", renderer, LIFE_WEIGHT, LIFE_HEIGHT);
-        for(int p=0; p<num_power; p++){
-            Power[p].loadImg("images//power.png", renderer, POWER_WEIGHT, POWER_HEIGHT);
-        }
-        for(int r=0; r<num_diamonds; r++){
-            diamonds[r].loadImg("images//tinh_thach.png", renderer, DIAMOND_WEIGHT, DIAMOND_HEIGHT);
-            diamonds[r].set_position_r(SCREEN_WIDTH/2, -(r+1)*(DIAMOND_HEIGHT+5));
+        Power.loadImg("images//power.png", renderer, POWER_WEIGHT, POWER_HEIGHT);
+
+        for(int r=0; r<num_coins; r++){
+            coins[r].loadImg("images//money.png", renderer, COIN_WEIGHT, COIN_HEIGHT);
+            coins[r].set_position_r(SCREEN_WIDTH/2, -(r+1)*(COIN_HEIGHT+5));
         }
 
     //spaceship
     HYPERION.loadImg("images//spaceship.png", renderer, SHIP_WIDTH, SHIP_HEIGHT);
     //enemies
+    ENEMY_LV_S.loadImg("images//enemy_lv_S.png",renderer, BOSS_WIDTH, BOSS_HEIGHT);
     for(int e=0; e<num_enemy; e++){
         e_ship[e].loadImg("images//aaa.png", renderer, E_WIDTH, E_HEIGHT);
         e_ship[e].set_position();
@@ -126,30 +124,40 @@ void object_appear(Uint32 &time){
             e_ship[ee].shoot(renderer, speed2);
         }
     }
-    if((time>30 && time<100)||(time>250 && time<320)){
-        for(int ee=0; ee<num_enemy; ee++){
-            if(time%15==0){e_ship[ee].moveHorizontal=true;}
-            else e_ship[ee].moveHorizontal=false;
-        }
-    }
-    int _x=rand()%(SCREEN_WIDTH-DIAMOND_WEIGHT);
 
-    if((time>10 && time <50) || (time>100 && time<300)){
-        for(int dd=0; dd<num_diamonds; dd++){
-            diamonds[dd].simple_move(_x);
-            diamonds[dd].render(renderer, diamonds[dd].ob_rect.x, diamonds[dd].ob_rect.y);
-        }
+    for(int ee=0; ee<num_enemy; ee++){
+        if((time>20 && time<60)||(time>110 && time<150)){
+            e_ship[ee].moveHorizontal=true;
+        }else e_ship[ee].moveHorizontal=false;
     }
 
-    if((time>30&&time<45) || (time>150&&time<200) || (time>250&&time<280)){
+    if(time>0){
+        ENEMY_LV_S.HandleMove(SCREEN_WIDTH, SCREEN_HEIGHT, speed_e);
+        ENEMY_LV_S.render(renderer, ENEMY_LV_S.x_e, ENEMY_LV_S.y_e);
+    }
+
+    int _x=rand()%(SCREEN_WIDTH-COIN_WEIGHT);
+    if((time>10 && time <70) || (time>100 && time<200)){
+        for(int dd=0; dd<num_coins; dd++){
+            coins[dd].simple_move(_x);
+            coins[dd].render(renderer, coins[dd].ob_rect.x, coins[dd].ob_rect.y);
+        }
+    }
+
+    if((time>30&&time<40) || (time>150&&time<160) || (time>250&&time<265)){
         Life.simple_move(_x);
         Life.render(renderer, Life.ob_rect.x, Life.ob_rect.y);
     }
+
+    if(time>3){
+        Power.simple_move(_x+10);
+        Power.render(renderer, Power.ob_rect.x, Power.ob_rect.y);
+    }
+
 }
 
 
 void Play_Game(){
-
     load_game_elements();
     if(Menu_Game()){
         //play game//
@@ -177,18 +185,18 @@ void Play_Game(){
             g_score.content=str_mark;
             g_score.LoadFromRenderTexture(g_font, renderer);
             g_score.renderText(renderer, 2, 10);
-            //DIAMONDS
-            NUM_DIAMONDS.render(renderer, 300, 10);
-            amount_diamonds.content=to_string(amount_d);
-            amount_diamonds.LoadFromRenderTexture(g_font, renderer);
-            amount_diamonds.renderText(renderer, 340, 10);
+            //COINS
+            NUM_COINS.render(renderer, 300, 10);
+            amount_coins.content=to_string(amount_c);
+            amount_coins.LoadFromRenderTexture(g_font, renderer);
+            amount_coins.renderText(renderer, 340, 10);
         ///////////////////////////////////////////////////////////////////////
             while( SDL_PollEvent( &e ) != 0 )
             {
                 if( e.type == SDL_QUIT ){
                     quit=true;
                 }
-                HYPERION.InputAction(e, renderer);
+                HYPERION.InputAction(e, renderer, collected_power);
             }
 
             object_appear(time_val);
@@ -196,18 +204,25 @@ void Play_Game(){
             HYPERION.move();
             HYPERION.render(renderer, HYPERION.x_, HYPERION.y_);
             HYPERION.shoot(renderer);
+            HYPERION.after_get_power(collected_power);
 
             //collect reward
             if(count_life>=1){
+
+                if(HYPERION.blt_checkCollision(Power.ob_rect)){
+                    Power.set_position_r(SCREEN_WIDTH/(rand()%5+1));
+                    collected_power++;
+                }
                 if(Life.blt_checkCollision(HYPERION.ob_rect)){
-                    Life.set_position_r(SCREEN_WIDTH/time_val);
+                    Life.set_position_r(SCREEN_WIDTH/(rand()%10+1));
                     count_life++;
                     cout<<"Your number of lifes: "<<count_life<<endl;
                 }
-                for(int d_c=0; d_c<num_diamonds; d_c++){
-                    if(diamonds[d_c].blt_checkCollision(HYPERION.ob_rect)){
-                        diamonds[d_c].set_position_r(SCREEN_WIDTH/3, -(d_c+1)*(DIAMOND_WEIGHT+10));
-                        amount_d++;
+                for(int d_c=0; d_c<num_coins; d_c++){
+                    if(coins[d_c].blt_checkCollision(HYPERION.ob_rect)){
+                        int random=rand()%10+1;
+                        coins[d_c].set_position_r(SCREEN_WIDTH/random, -(d_c+1)*(COIN_WEIGHT+10));
+                        amount_c++;
                     }
                 }
             }
@@ -217,7 +232,7 @@ void Play_Game(){
                 for(int k=0; k<HYPERION.bullet_list.size(); k++){
                     Bullet* b_col= HYPERION.bullet_list.at(k);
                     if(b_col->blt_checkCollision(e_ship[e_c].ob_rect)){
-                        mark++;
+                        mark+=10;
                         b_col->is_move=false;
                         e_ship[e_c].set_position();
 
@@ -234,10 +249,12 @@ void Play_Game(){
                     e_ship[e_c].set_bullet_position();
                     Mix_PlayChannel( -1, ship_die, 0 );
                     count_life--;
+                    collected_power=0;
+                    HYPERION.reset_bullet_shape();
+
                     cout<<"Your number of lifes: "<<count_life<<endl;
                 }
-                if(count_life<1){
-                    cout<<endl<<endl<<"   GAME OVER!"<<endl<<endl<<"Your score is: "<<mark<<endl;
+                if(count_life<1 || win){
                     quit=true;
                     End_Game();
                     break;
@@ -255,17 +272,24 @@ void End_Game(){
     your_score.content=to_string(mark);
     your_score.LoadFromRenderTexture(g_font, renderer);
 
+    BaseObjects STAR_NUM; const int STAR_WIDTH=105, STAR_HEIGHT=35;
+
     int x_text=90;
     if(win){
         text_in_the_end.loadImg("images//Win_game.png", renderer, 400, 150);
         x_text=60;
+
+        if(amount_c>200){STAR_NUM.loadImg("images//3_stars.png", renderer, STAR_WIDTH, STAR_HEIGHT);}
+        else if(amount_c>100){STAR_NUM.loadImg("images//2_stars.png", renderer, STAR_WIDTH, STAR_HEIGHT);}
+        else if(amount_c>20) {STAR_NUM.loadImg("images//1_star.png", renderer, STAR_WIDTH, STAR_HEIGHT);}
     }else text_in_the_end.loadImg("images//game_over.png", renderer, 300, 100);
 
     bool q=false;
     while(!q){
         SDL_RenderClear( renderer );
         g_menu_end.render(renderer, 0, 0);
-        text_in_the_end.render(renderer, x_text, 100);
+        text_in_the_end.render(renderer, x_text, 80);
+        if(win){STAR_NUM.render(renderer, 170, 260);}
         your_score.renderText(renderer, 194, 352);
         SDL_RenderPresent(renderer);
         while(SDL_PollEvent(&e)){

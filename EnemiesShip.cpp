@@ -45,3 +45,7 @@ void Enemies::HandleInputAction(SDL_Event &e){
 
 }
 
+void Enemies::special_move(const int x_limit, const int y_limit, int speed_boss){
+
+}
+

@@ -8,13 +8,38 @@ Bullet::Bullet(){
     x_b = 0;
     y_b = 0;
     is_move=false;
+    type=1;
 }
 
 Bullet::~Bullet(){
     objectFree();
 }
 
-void Bullet::after_get_power(){
+
+void Bullet::set_type_of_bullet(int _type_bullet){
+    type=_type_bullet;
+    switch(type){
+        case 2:
+            ob_rect.w=A1_W;
+            ob_rect.h=A1_H;
+            break;
+        case 3:
+            ob_rect.w=S_W;
+            ob_rect.h=S_H;
+            break;
+        case 4:
+            ob_rect.w=B_W;
+            ob_rect.h=B_H;
+            break;
+        case 5:
+            ob_rect.w=SS_W;
+            ob_rect.h=SS_H;
+            break;
+        default:
+            ob_rect.w=A_W;
+            ob_rect.h=A_H;
+            break;
+    }
 
 }
 
