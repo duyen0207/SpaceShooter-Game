@@ -10,7 +10,12 @@
 const int SHIP_WIDTH = 80;
 const int SHIP_HEIGHT = 80;
 
+const int EARTH_WIDTH=200;
+const int EARTH_HEIGHT=200;
+
 const int step=5;
+
+
 
 struct Spaceship : BaseObjects
 {
@@ -18,15 +23,19 @@ struct Spaceship : BaseObjects
     int y_=500;
     int v_x=0, v_y=0;
     string shape_bullet;
+    int count_life;
+    int collected_power;
+    Uint32 coins_amount;
     vector<Bullet*> bullet_list;
 
     Spaceship();
     ~Spaceship();
 
-    void InputAction(SDL_Event &e, SDL_Renderer* &renderer, int _num_power=0);
+    void die();
+    void InputAction(SDL_Event &e, SDL_Renderer* &renderer);
     void move();
     //BULLET
-    void after_get_power(int _num_power_collected);
+    void after_get_power();
     void reset_bullet_shape(){shape_bullet="images//bullet.png";}
     void shoot(SDL_Renderer* &renderer);
     void destroy(const int& i_bullet);

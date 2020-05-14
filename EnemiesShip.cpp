@@ -49,3 +49,12 @@ void Enemies::special_move(const int x_limit, const int y_limit, int speed_boss)
 
 }
 
+void Enemies::Boss_die(int &num_life, const int type_bullet){
+    if(type_bullet==1){
+        num_life--;
+    }else if(type_bullet==2){
+        num_life-=2;
+    }else if(type_bullet==3){
+        num_life-=3;
+    }
+}

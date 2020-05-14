@@ -15,7 +15,7 @@ const int speed_e=3;
 const int num_enemy=10;
 
 const int num_bullet_of_boss=10;
-const int life_of_enemy_S=30;
+
 const int life_of_enemy_A=15;
 
 struct Enemies : BaseObjects{
@@ -36,7 +36,7 @@ struct Enemies : BaseObjects{
     void HandleInputAction(SDL_Event &e);
 
     void special_move(const int x_limit, const int y_limit, int speed_boss);
-
+    void Boss_die(int &num_life, const int type_bullet);
 };
 
 #endif // ENEMIES_h

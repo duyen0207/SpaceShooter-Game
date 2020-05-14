@@ -17,6 +17,9 @@ struct BaseObjects {
     void render(SDL_Renderer* &des, int _x, int _y);  //apply texture to screen with its location
     bool spac_checkCollision(const SDL_Rect& other_rect);
     bool blt_checkCollision(const SDL_Rect& other_rect);
+
+    void earth_move();
+
     void objectFree(); //free pointer
 };
 #endif // Base_Object_h

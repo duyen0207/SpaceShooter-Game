@@ -7,13 +7,26 @@ Spaceship::Spaceship(){
     ob_rect.w=SHIP_WIDTH;
     ob_rect.h=SHIP_HEIGHT;
     shape_bullet="images//bullet.png";
+    count_life=1;
+    collected_power=0;
+    coins_amount=0;
 }
 
 Spaceship::~Spaceship(){
     objectFree();
 }
 
-void Spaceship::InputAction(SDL_Event &e, SDL_Renderer* &renderer, int _num_power){
+void Spaceship::die(){
+    count_life--;
+    collected_power=0;
+    x_=SCREEN_WIDTH/2;
+    reset_bullet_shape();
+
+    cout<<"Your number of lifes: "<<count_life<<endl;
+
+}
+
+void Spaceship::InputAction(SDL_Event &e, SDL_Renderer* &renderer){
 
     //If a key was pressed
 	if( e.type == SDL_KEYDOWN && e.key.repeat == 0 )
@@ -44,7 +57,7 @@ void Spaceship::InputAction(SDL_Event &e, SDL_Renderer* &renderer, int _num_powe
             Bullet* a_bullet = new Bullet();
 
             int type_bullet=1;
-            if(_num_power==1){type_bullet=2;}else if(_num_power>1){type_bullet=3;}
+            if(collected_power==1){type_bullet=2;}else if(collected_power>1){type_bullet=3;}
 
             a_bullet->set_type_of_bullet(type_bullet);
             a_bullet->loadImg(shape_bullet, renderer, a_bullet->ob_rect.w, a_bullet->ob_rect.h);
@@ -65,10 +78,10 @@ void Spaceship::move(){
     if(y_>SCREEN_HEIGHT-SHIP_HEIGHT) y_-=step;
 }
 
-void Spaceship::after_get_power(int _num_power_collected){
-    if(_num_power_collected==1){
+void Spaceship::after_get_power(){
+    if(collected_power==1){
         shape_bullet="images//bullet_level2.png";
-    }else if(_num_power_collected>1){
+    }else if(collected_power>1){
         shape_bullet="images//bullet_max.png";
     }
 }

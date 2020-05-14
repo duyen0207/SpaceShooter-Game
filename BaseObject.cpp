@@ -40,6 +40,12 @@ void BaseObjects::render(SDL_Renderer* &des, int _x, int _y){
     SDL_RenderCopy(des, object, NULL, &ob_rect);
 }
 
+void BaseObjects::earth_move(){
+    if(ob_rect.y<SCREEN_HEIGHT/4){
+        ob_rect.y++;
+    }
+}
+
 bool BaseObjects::spac_checkCollision(const SDL_Rect& other_rect){
     int left_this=ob_rect.x+ob_rect.w*2/5;
     int right_this=ob_rect.x+ob_rect.w*3/5;

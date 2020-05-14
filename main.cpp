@@ -17,12 +17,13 @@ SDL_Event e;
     BaseObjects text_in_the_end;
             //CHARACTERS AND ITEMS
             Spaceship HYPERION;
+            BaseObjects HOME;
             Enemies e_ship[num_enemy];
-            Enemies ENEMY_LV_S; Bullet bullets_boss[num_bullet_of_boss];
+            Enemies ENEMY_LV_S; Bullet bullets_boss[num_bullet_of_boss]; int life_of_enemy_S=30;
 
-            Reward coins[num_coins]; BaseObjects NUM_COINS; A_Text amount_coins; Uint32 amount_c=0;
-            Reward Life; int count_life=1;
-            Reward Power; int collected_power=0;
+            Reward coins[num_coins]; BaseObjects NUM_COINS; A_Text amount_coins;
+            Reward Life;
+            Reward Power;
                 //additional elements
                 bool win=false;
                 bool quit = false;
@@ -106,6 +107,8 @@ void load_game_elements(){
 
     //spaceship
     HYPERION.loadImg("images//spaceship.png", renderer, SHIP_WIDTH, SHIP_HEIGHT);
+    HOME.loadImg("images//earth.png", renderer, EARTH_WIDTH, EARTH_WIDTH);
+    HOME.ob_rect.y=-SCREEN_HEIGHT/2;
     //enemies
     ENEMY_LV_S.loadImg("images//enemy_lv_S.png",renderer, BOSS_WIDTH, BOSS_HEIGHT);
     for(int e=0; e<num_enemy; e++){
@@ -134,6 +137,11 @@ void object_appear(Uint32 &time){
     if(time>0){
         ENEMY_LV_S.HandleMove(SCREEN_WIDTH, SCREEN_HEIGHT, speed_e);
         ENEMY_LV_S.render(renderer, ENEMY_LV_S.x_e, ENEMY_LV_S.y_e);
+    }
+
+    if(life_of_enemy_S<1){
+        HOME.earth_move();
+        HOME.render(renderer, (SCREEN_WIDTH-EARTH_WIDTH)*0.5, HOME.ob_rect.y);
     }
 
     int _x=rand()%(SCREEN_WIDTH-COIN_WEIGHT);
@@ -187,7 +195,7 @@ void Play_Game(){
             g_score.renderText(renderer, 2, 10);
             //COINS
             NUM_COINS.render(renderer, 300, 10);
-            amount_coins.content=to_string(amount_c);
+            amount_coins.content=to_string(HYPERION.coins_amount);
             amount_coins.LoadFromRenderTexture(g_font, renderer);
             amount_coins.renderText(renderer, 340, 10);
         ///////////////////////////////////////////////////////////////////////
@@ -196,7 +204,7 @@ void Play_Game(){
                 if( e.type == SDL_QUIT ){
                     quit=true;
                 }
-                HYPERION.InputAction(e, renderer, collected_power);
+                HYPERION.InputAction(e, renderer);
             }
 
             object_appear(time_val);
@@ -204,29 +212,58 @@ void Play_Game(){
             HYPERION.move();
             HYPERION.render(renderer, HYPERION.x_, HYPERION.y_);
             HYPERION.shoot(renderer);
-            HYPERION.after_get_power(collected_power);
+            HYPERION.after_get_power();
 
             //collect reward
-            if(count_life>=1){
+            if(HYPERION.count_life>=1){
 
                 if(HYPERION.blt_checkCollision(Power.ob_rect)){
                     Power.set_position_r(SCREEN_WIDTH/(rand()%5+1));
-                    collected_power++;
+                    HYPERION.collected_power++;
                 }
                 if(Life.blt_checkCollision(HYPERION.ob_rect)){
                     Life.set_position_r(SCREEN_WIDTH/(rand()%10+1));
-                    count_life++;
-                    cout<<"Your number of lifes: "<<count_life<<endl;
+                    HYPERION.count_life++;
+                    cout<<"Your number of lifes: "<<HYPERION.count_life<<endl;
                 }
                 for(int d_c=0; d_c<num_coins; d_c++){
                     if(coins[d_c].blt_checkCollision(HYPERION.ob_rect)){
                         int random=rand()%10+1;
                         coins[d_c].set_position_r(SCREEN_WIDTH/random, -(d_c+1)*(COIN_WEIGHT+10));
-                        amount_c++;
+                        HYPERION.coins_amount++;
                     }
                 }
             }
             //check collision between spaceship, bullets and enemy
+
+            if(time_val>0){
+
+                for(int k=0; k<HYPERION.bullet_list.size(); k++){
+                    Bullet* b_col= HYPERION.bullet_list.at(k);
+                    if(b_col->blt_checkCollision(ENEMY_LV_S.ob_rect)){
+                        mark+=2000;
+                        b_col->is_move=false;
+                        ENEMY_LV_S.Boss_die(life_of_enemy_S, b_col->type);
+
+                        HYPERION.bullet_list.erase(HYPERION.bullet_list.begin()+k);
+                        if(b_col!=NULL){
+                            delete b_col;
+                            b_col=NULL;
+                        }
+                    }
+                }
+                if(HYPERION.spac_checkCollision(ENEMY_LV_S.ob_rect)){
+                    Mix_PlayChannel( -1, ship_die, 0 );
+                    HYPERION.die();
+                    life_of_enemy_S--;
+                }
+                if(life_of_enemy_S<1){
+                    if(HYPERION.blt_checkCollision(HOME.ob_rect)){
+                        win=true;
+                    }
+                }
+            }
+
             for(int e_c=0; e_c<num_enemy; ++e_c){
                 //bullet of spaceship and enemies
                 for(int k=0; k<HYPERION.bullet_list.size(); k++){
@@ -248,17 +285,15 @@ void Play_Game(){
                     e_ship[e_c].set_position();
                     e_ship[e_c].set_bullet_position();
                     Mix_PlayChannel( -1, ship_die, 0 );
-                    count_life--;
-                    collected_power=0;
-                    HYPERION.reset_bullet_shape();
-
-                    cout<<"Your number of lifes: "<<count_life<<endl;
+                    HYPERION.die();
                 }
-                if(count_life<1 || win){
-                    quit=true;
-                    End_Game();
+                if(HYPERION.count_life<1 || win){
                     break;
                 }
+            }
+            if(HYPERION.count_life<1 || win){
+                quit=true;
+                End_Game();
             }
 
             SDL_RenderPresent(renderer);
@@ -279,9 +314,10 @@ void End_Game(){
         text_in_the_end.loadImg("images//Win_game.png", renderer, 400, 150);
         x_text=60;
 
-        if(amount_c>200){STAR_NUM.loadImg("images//3_stars.png", renderer, STAR_WIDTH, STAR_HEIGHT);}
-        else if(amount_c>100){STAR_NUM.loadImg("images//2_stars.png", renderer, STAR_WIDTH, STAR_HEIGHT);}
-        else if(amount_c>20) {STAR_NUM.loadImg("images//1_star.png", renderer, STAR_WIDTH, STAR_HEIGHT);}
+        if(HYPERION.coins_amount>200){STAR_NUM.loadImg("images//3_stars.png", renderer, STAR_WIDTH, STAR_HEIGHT);}
+        else if(HYPERION.coins_amount>100){STAR_NUM.loadImg("images//2_stars.png", renderer, STAR_WIDTH, STAR_HEIGHT);}
+        else if(HYPERION.coins_amount>20) {STAR_NUM.loadImg("images//1_star.png", renderer, STAR_WIDTH, STAR_HEIGHT);}
+        else STAR_NUM.loadImg("images//no_star.png", renderer, STAR_WIDTH, STAR_HEIGHT);
     }else text_in_the_end.loadImg("images//game_over.png", renderer, 300, 100);
 
     bool q=false;
