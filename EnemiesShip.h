@@ -16,7 +16,7 @@ const int num_enemy=10;
 
 const int num_bullet_of_boss=10;
 
-const int life_of_enemy_A=15;
+const int sum_life_of_enemy_S=30;
 
 struct Enemies : BaseObjects{
     int x_e;

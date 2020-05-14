@@ -9,6 +9,7 @@ SDL_Renderer* renderer = NULL;
 TTF_Font* g_font=NULL;
 Mix_Music* g_music=NULL;
 Mix_Chunk* ship_die=NULL;
+Mix_Chunk* eat_money=NULL;
 SDL_Event e;
     //main elements in game
     BaseObjects g_background;
@@ -29,6 +30,7 @@ SDL_Event e;
                 bool quit = false;
                 int scrollingOffset=0;
                 A_Text g_score; Uint32 mark=0;
+                A_Text your_score;
 
 bool Menu_Game();
 void load_game_elements();
@@ -120,30 +122,12 @@ void load_game_elements(){
 
 void object_appear(Uint32 &time){
 
-    if(time>5){
-        for(int ee=0; ee<num_enemy; ee++){
-            e_ship[ee].HandleMove(SCREEN_WIDTH, SCREEN_HEIGHT, speed_e);
-            e_ship[ee].render(renderer, e_ship[ee].x_e, e_ship[ee].y_e);
-            e_ship[ee].shoot(renderer, speed2);
-        }
-    }
-
-    for(int ee=0; ee<num_enemy; ee++){
-        if((time>20 && time<60)||(time>110 && time<150)){
-            e_ship[ee].moveHorizontal=true;
-        }else e_ship[ee].moveHorizontal=false;
-    }
-
-    if(time>0){
-        ENEMY_LV_S.HandleMove(SCREEN_WIDTH, SCREEN_HEIGHT, speed_e);
-        ENEMY_LV_S.render(renderer, ENEMY_LV_S.x_e, ENEMY_LV_S.y_e);
-    }
-
+//HOME
     if(life_of_enemy_S<1){
         HOME.earth_move();
         HOME.render(renderer, (SCREEN_WIDTH-EARTH_WIDTH)*0.5, HOME.ob_rect.y);
     }
-
+//SUPPORT
     int _x=rand()%(SCREEN_WIDTH-COIN_WEIGHT);
     if((time>10 && time <70) || (time>100 && time<200)){
         for(int dd=0; dd<num_coins; dd++){
@@ -161,6 +145,27 @@ void object_appear(Uint32 &time){
         Power.simple_move(_x+10);
         Power.render(renderer, Power.ob_rect.x, Power.ob_rect.y);
     }
+//SMALL ENEMIES
+    if(time>5){
+        for(int ee=0; ee<num_enemy; ee++){
+            e_ship[ee].HandleMove(SCREEN_WIDTH, SCREEN_HEIGHT, speed_e);
+            e_ship[ee].render(renderer, e_ship[ee].x_e, e_ship[ee].y_e);
+            e_ship[ee].shoot(renderer, speed2);
+        }
+    }
+
+    for(int ee=0; ee<num_enemy; ee++){
+        if((time>20 && time<60)||(time>110 && time<150)){
+            e_ship[ee].moveHorizontal=true;
+        }else e_ship[ee].moveHorizontal=false;
+    }
+//BOSS
+    if(time>0){
+        ENEMY_LV_S.HandleMove(SCREEN_WIDTH, SCREEN_HEIGHT/2, speed_e);
+        ENEMY_LV_S.render(renderer, ENEMY_LV_S.x_e, ENEMY_LV_S.y_e);
+    }
+
+
 
 }
 
@@ -214,7 +219,7 @@ void Play_Game(){
             HYPERION.shoot(renderer);
             HYPERION.after_get_power();
 
-            //collect reward
+//SUPPORT_ITEM
             if(HYPERION.count_life>=1){
 
                 if(HYPERION.blt_checkCollision(Power.ob_rect)){
@@ -231,6 +236,7 @@ void Play_Game(){
                         int random=rand()%10+1;
                         coins[d_c].set_position_r(SCREEN_WIDTH/random, -(d_c+1)*(COIN_WEIGHT+10));
                         HYPERION.coins_amount++;
+                        Mix_PlayChannel( -1, eat_money, 0 );
                     }
                 }
             }
@@ -302,7 +308,7 @@ void Play_Game(){
 }
 
 void End_Game(){
-    A_Text your_score;
+
     your_score.set_color(0, 255, 0);
     your_score.content=to_string(mark);
     your_score.LoadFromRenderTexture(g_font, renderer);

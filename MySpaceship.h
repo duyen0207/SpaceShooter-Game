@@ -10,8 +10,8 @@
 const int SHIP_WIDTH = 80;
 const int SHIP_HEIGHT = 80;
 
-const int EARTH_WIDTH=200;
-const int EARTH_HEIGHT=200;
+const int EARTH_WIDTH=300;
+const int EARTH_HEIGHT=300;
 
 const int step=5;
 

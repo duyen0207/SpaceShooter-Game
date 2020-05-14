@@ -26,7 +26,7 @@ void Enemies::HandleMove(const int& x_max, const int& y_max, const int speed_e){
         x_e+=speed_e;
     }
     else y_e+=speed_e;
-    if(y_e>SCREEN_HEIGHT || x_e>SCREEN_WIDTH){
+    if(y_e>y_max || x_e>x_max){
         set_position();
     }
 }
