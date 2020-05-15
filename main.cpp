@@ -155,27 +155,29 @@ void object_appear(Uint32 &time){
         Power.render(renderer, Power.ob_rect.x, Power.ob_rect.y);
     }
 //SMALL ENEMIES
-    if(time>5){
+    if(time>5 && life_of_enemy_S>0){
         for(int ee=0; ee<num_enemy; ee++){
             e_ship[ee].HandleMove(SCREEN_WIDTH, SCREEN_HEIGHT, speed_e);
             e_ship[ee].render(renderer, e_ship[ee].x_e, e_ship[ee].y_e);
             e_ship[ee].shoot(renderer, speed2);
         }
+        for(int ee=0; ee<num_enemy; ee++){
+            if((time>20 && time<60)||(time>110 && time<150)){
+                e_ship[ee].moveHorizontal=true;
+            }else e_ship[ee].moveHorizontal=false;
+        }
     }
 
-    for(int ee=0; ee<num_enemy; ee++){
-        if((time>20 && time<60)||(time>110 && time<150)){
-            e_ship[ee].moveHorizontal=true;
-        }else e_ship[ee].moveHorizontal=false;
-    }
+
 //BOSS
     if(time>0){
-        ENEMY_LV_S.HandleMove(SCREEN_WIDTH, SCREEN_HEIGHT/2, speed_e);
+        ENEMY_LV_S.HandleMove(SCREEN_WIDTH, SCREEN_HEIGHT/3, SPEED_BOSS);
         ENEMY_LV_S.render(renderer, ENEMY_LV_S.x_e, ENEMY_LV_S.y_e);
+        for(int j=0; j<num_bullet_of_boss; j++){
+            BULLETS_BOSS[j].move_bullet_of_boss(ENEMY_LV_S.x_e, ENEMY_LV_S.y_e, SPEED_BULLET);
+            BULLETS_BOSS[j].render(renderer, BULLETS_BOSS[j].x_b, BULLETS_BOSS[j].y_b);
+        }
     }
-
-
-
 }
 
 
