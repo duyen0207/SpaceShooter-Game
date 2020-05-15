@@ -14,10 +14,12 @@ const int BOSS_HEIGHT=150;
 const int speed_e=3;
 const int num_enemy=10;
 
+const int TIME_BOSS_APPEAR=0;
 const int SPEED_BULLET=4;
 const int SPEED_BOSS=3;
 const int num_bullet_of_boss=4;
 const int sum_life_of_enemy_S=30;
+
 
 struct Enemies : BaseObjects{
     int x_e;
@@ -34,9 +36,8 @@ struct Enemies : BaseObjects{
     void HandleMove(const int& x_max, const int& y_max, const int speed_e);
     void shoot(SDL_Renderer* renderer, const int speed);
     void set_bullet_position(){e_bullet.x_b=x_e+E_WIDTH/2; e_bullet.y_b=y_e+E_HEIGHT; e_bullet.is_move=true;}
-    void HandleInputAction(SDL_Event &e);
 
-    void special_move(const int x_limit, const int y_limit, int speed_boss);
+    void special_move(int &life, const int x_limit, const int y_limit, int speed_boss);
     void Boss_die(int &num_life, const int type_bullet);
 };
 

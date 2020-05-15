@@ -170,7 +170,7 @@ void object_appear(Uint32 &time){
 
 
 //BOSS
-    if(time>0){
+    if(time>TIME_BOSS_APPEAR){
         ENEMY_LV_S.HandleMove(SCREEN_WIDTH, SCREEN_HEIGHT/6, SPEED_BOSS);
         ENEMY_LV_S.render(renderer, ENEMY_LV_S.x_e, ENEMY_LV_S.y_e);
         ENEMY_LV_S.shoot(renderer, speed1);
@@ -257,7 +257,7 @@ void Play_Game(){
             }
             //check collision between spaceship, bullets and enemy
 
-            if(time_val>0){
+            if(time_val>TIME_BOSS_APPEAR){
     //BULLET OF YOU AND BOSS
                 for(int k=0; k<HYPERION.bullet_list.size(); k++){
                     Bullet* b_col= HYPERION.bullet_list.at(k);
@@ -279,6 +279,14 @@ void Play_Game(){
                     HYPERION.die();
                     life_of_enemy_S--;
                 }
+            //BULLETS OF BOSS
+                for(int k=0; k<num_bullet_of_boss; k++){
+                    if(HYPERION.spac_checkCollision(BULLETS_BOSS[k].ob_rect)){
+                        Mix_PlayChannel( -1, ship_die, 0 );
+                        HYPERION.die();
+                    }
+                }
+
                 if(life_of_enemy_S<1){
                     if(HYPERION.blt_checkCollision(HOME.ob_rect)){
                         win=true;
