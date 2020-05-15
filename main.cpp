@@ -20,7 +20,7 @@ SDL_Event e;
             Spaceship HYPERION;
             BaseObjects HOME;
             Enemies e_ship[num_enemy];
-            Enemies ENEMY_LV_S; Bullet bullets_boss[num_bullet_of_boss]; int life_of_enemy_S=30;
+            Enemies ENEMY_LV_S; Bullet BULLETS_BOSS[num_bullet_of_boss]; int life_of_enemy_S=30;
 
             Reward coins[num_coins]; BaseObjects NUM_COINS; A_Text amount_coins;
             Reward Life;
@@ -94,6 +94,7 @@ void load_game_elements(){
     g_background.loadImg("images//galaxy.png", renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
     load_mp3_sound(g_music, "sound_effect//background_music.mp3");
     load_wav_sound(ship_die, "sound_effect//bum.wav");
+    load_wav_sound(eat_money, "sound_effect//beep.wav");
     //SCORE
     g_score.set_color(0,255,255);
     NUM_COINS.loadImg("images//money.png", renderer, COIN_WEIGHT, COIN_HEIGHT);
@@ -113,6 +114,14 @@ void load_game_elements(){
     HOME.ob_rect.y=-SCREEN_HEIGHT/2;
     //enemies
     ENEMY_LV_S.loadImg("images//enemy_lv_S.png",renderer, BOSS_WIDTH, BOSS_HEIGHT);
+    ENEMY_LV_S.e_bullet.loadImg("images//big_bullet.png",renderer, SS_W, SS_H);
+    for(int i=0; i<num_bullet_of_boss; i++){
+        BULLETS_BOSS[i].loadImg("images//big_bullet.png",renderer, SS_W, SS_H);
+        if(i<=num_bullet_of_boss/2){
+            BULLETS_BOSS[i].set_position_(ENEMY_LV_S.x_e, (ENEMY_LV_S.y_e+BOSS_HEIGHT+i*SS_H));
+        }
+        else BULLETS_BOSS[i].set_position_((ENEMY_LV_S.x_e+BOSS_WIDTH*3/4), (ENEMY_LV_S.y_e+BOSS_HEIGHT+i*SS_H));
+    }
     for(int e=0; e<num_enemy; e++){
         e_ship[e].loadImg("images//aaa.png", renderer, E_WIDTH, E_HEIGHT);
         e_ship[e].set_position();
@@ -350,5 +359,7 @@ void close(){
 	g_music = NULL;
 	//Free the sound effects
 	Mix_FreeChunk( ship_die );
+	Mix_FreeChunk( eat_money);
     ship_die=NULL;
+    eat_money=NULL;
 }

@@ -40,7 +40,8 @@ struct Bullet : BaseObjects
 
     void set_type_of_bullet(int _type_bullet=1);
     void move_b(const int& width, const int& height, const bool direction, const int speed);
-
+    void move_bullet_of_boss(int enemy_x, int enemy_y, int speed, int direction=false);
+    void set_position_(int x_pp, int y_pp){x_b=x_pp; y_b=y_pp; is_move=true;}
 };
 
 

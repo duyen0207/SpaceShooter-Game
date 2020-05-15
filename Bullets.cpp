@@ -52,3 +52,14 @@ void Bullet::move_b(const int& width, const int& height, const bool direction, c
     }
 }
 
+
+
+void Bullet::move_bullet_of_boss(int enemy_x, int enemy_y, int speed, int direction){
+    //direction = true->move down to up, false-> up to down
+    if(direction){y_b-=speed;}
+    else if(!direction){y_b+=speed;}
+    if(y_b<0 || y_b>SCREEN_HEIGHT || x_b<0 || x_b>SCREEN_WIDTH){
+        is_move=false;
+    }
+    if(!is_move) set_position_(rand()%(enemy_x+200)+enemy_x, enemy_y);
+}
