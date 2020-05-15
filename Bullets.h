@@ -17,10 +17,10 @@
     const int A_W = 20;
     const int A_H = 30;
     //type 2
-    const int A1_W = 50;
-    const int A1_H = 30;
+    const int A1_W = 60;
+    const int A1_H = 35;
     //type 3
-    const int S_W = 80;
+    const int S_W = 100;
     const int S_H = 40;
 
 

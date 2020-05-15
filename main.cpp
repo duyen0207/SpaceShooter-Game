@@ -171,8 +171,10 @@ void object_appear(Uint32 &time){
 
 //BOSS
     if(time>0){
-        ENEMY_LV_S.HandleMove(SCREEN_WIDTH, SCREEN_HEIGHT/3, SPEED_BOSS);
+        ENEMY_LV_S.HandleMove(SCREEN_WIDTH, SCREEN_HEIGHT/6, SPEED_BOSS);
         ENEMY_LV_S.render(renderer, ENEMY_LV_S.x_e, ENEMY_LV_S.y_e);
+        ENEMY_LV_S.shoot(renderer, speed1);
+        ENEMY_LV_S.e_bullet.render(renderer, ENEMY_LV_S.e_bullet.x_b, ENEMY_LV_S.e_bullet.y_b);
         for(int j=0; j<num_bullet_of_boss; j++){
             BULLETS_BOSS[j].move_bullet_of_boss(ENEMY_LV_S.x_e, ENEMY_LV_S.y_e, SPEED_BULLET);
             BULLETS_BOSS[j].render(renderer, BULLETS_BOSS[j].x_b, BULLETS_BOSS[j].y_b);
@@ -214,13 +216,13 @@ void Play_Game(){
                 if( e.type == SDL_QUIT ){
                     quit=true;
                 }
+                HYPERION.after_get_power();
                 HYPERION.InputAction(e, renderer);
             }
 
             object_appear(time_val);
             //Render spaceship
             HYPERION.move();
-            HYPERION.after_get_power();
             HYPERION.shoot(renderer);
             HYPERION.render(renderer, HYPERION.x_, HYPERION.y_);
 
@@ -228,11 +230,11 @@ void Play_Game(){
             g_score.LoadFromRenderTexture(g_font, renderer);
             g_score.renderText(renderer, 2, 10);
             //COINS
-            NUM_COINS.render(renderer, 300, 10);
+            NUM_COINS.render(renderer, 320, 5);
             amount_coins.content=to_string(HYPERION.coins_amount);
             amount_coins.LoadFromRenderTexture(g_font, renderer);
-            amount_coins.renderText(renderer, 340, 10);
-//SUPPORT_ITEM
+            amount_coins.renderText(renderer, 360, 10);
+//CHECK COLLISION SUPPORT_ITEM
             if(HYPERION.count_life>=1){
 
                 if(HYPERION.blt_checkCollision(Power.ob_rect)){
@@ -256,7 +258,7 @@ void Play_Game(){
             //check collision between spaceship, bullets and enemy
 
             if(time_val>0){
-
+    //BULLET OF YOU AND BOSS
                 for(int k=0; k<HYPERION.bullet_list.size(); k++){
                     Bullet* b_col= HYPERION.bullet_list.at(k);
                     if(b_col->blt_checkCollision(ENEMY_LV_S.ob_rect)){
@@ -271,7 +273,8 @@ void Play_Game(){
                         }
                     }
                 }
-                if(HYPERION.spac_checkCollision(ENEMY_LV_S.ob_rect)){
+    //BOSS
+                if(HYPERION.spac_checkCollision(ENEMY_LV_S.ob_rect) || HYPERION.spac_checkCollision(ENEMY_LV_S.e_bullet.ob_rect)){
                     Mix_PlayChannel( -1, ship_die, 0 );
                     HYPERION.die();
                     life_of_enemy_S--;
