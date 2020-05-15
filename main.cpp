@@ -205,13 +205,7 @@ void Play_Game(){
             str_mark+=mark_val;//connect Score with mark value -> a string
 
             g_score.content=str_mark;
-            g_score.LoadFromRenderTexture(g_font, renderer);
-            g_score.renderText(renderer, 2, 10);
-            //COINS
-            NUM_COINS.render(renderer, 300, 10);
-            amount_coins.content=to_string(HYPERION.coins_amount);
-            amount_coins.LoadFromRenderTexture(g_font, renderer);
-            amount_coins.renderText(renderer, 340, 10);
+
         ///////////////////////////////////////////////////////////////////////
             while( SDL_PollEvent( &e ) != 0 )
             {
@@ -224,10 +218,18 @@ void Play_Game(){
             object_appear(time_val);
             //Render spaceship
             HYPERION.move();
-            HYPERION.render(renderer, HYPERION.x_, HYPERION.y_);
-            HYPERION.shoot(renderer);
             HYPERION.after_get_power();
+            HYPERION.shoot(renderer);
+            HYPERION.render(renderer, HYPERION.x_, HYPERION.y_);
 
+
+            g_score.LoadFromRenderTexture(g_font, renderer);
+            g_score.renderText(renderer, 2, 10);
+            //COINS
+            NUM_COINS.render(renderer, 300, 10);
+            amount_coins.content=to_string(HYPERION.coins_amount);
+            amount_coins.LoadFromRenderTexture(g_font, renderer);
+            amount_coins.renderText(renderer, 340, 10);
 //SUPPORT_ITEM
             if(HYPERION.count_life>=1){
 
@@ -256,7 +258,7 @@ void Play_Game(){
                 for(int k=0; k<HYPERION.bullet_list.size(); k++){
                     Bullet* b_col= HYPERION.bullet_list.at(k);
                     if(b_col->blt_checkCollision(ENEMY_LV_S.ob_rect)){
-                        mark+=2000;
+                        mark+=100*(sum_life_of_enemy_S-life_of_enemy_S);
                         b_col->is_move=false;
                         ENEMY_LV_S.Boss_die(life_of_enemy_S, b_col->type);
 
