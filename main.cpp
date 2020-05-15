@@ -170,8 +170,8 @@ void object_appear(Uint32 &time){
 
 
 //BOSS
-    if(time>TIME_BOSS_APPEAR){
-        ENEMY_LV_S.HandleMove(life_of_enemy_S, SCREEN_WIDTH, SCREEN_HEIGHT/6, SPEED_BOSS);
+    if(time>TIME_BOSS_APPEAR && life_of_enemy_S>0){
+        ENEMY_LV_S.Boss_move(SCREEN_WIDTH, SCREEN_HEIGHT/9, SPEED_BOSS);
         ENEMY_LV_S.render(renderer, ENEMY_LV_S.x_e, ENEMY_LV_S.y_e);
         ENEMY_LV_S.shoot(renderer, speed1);
         ENEMY_LV_S.e_bullet.render(renderer, ENEMY_LV_S.e_bullet.x_b, ENEMY_LV_S.e_bullet.y_b);
@@ -200,7 +200,7 @@ void Play_Game(){
             g_background.render(renderer, 0, scrollingOffset - SCREEN_HEIGHT);
             g_background.render(renderer, 0, scrollingOffset);
             ////Play the music
-            if( Mix_PlayingMusic() == 0 ){ Mix_PlayMusic( g_music, -1 );}
+            if( Mix_PlayingMusic() == 0){ Mix_PlayMusic( g_music, -1 );}
             //time
             Uint32 time_val=SDL_GetTicks()/1000;
             //Score

@@ -47,8 +47,21 @@ void Enemies::shoot(SDL_Renderer* renderer, const int speed){
     e_bullet.render(renderer, e_bullet.x_b, e_bullet.y_b);
 }
 
-void Enemies::special_move(int &life, const int x_limit, const int y_limit, int speed_boss){
-
+void Enemies::Boss_move(const int x_limit, const int y_limit, int speed_boss){
+        if(y_e<y_limit){x_e+=speed_boss;}
+        if(x_e>x_limit-BOSS_WIDTH) {
+            x_e-=speed_boss;
+            y_e+=speed_boss;
+        }
+        if(y_e>=y_limit){
+            x_e-=speed_boss;
+        }
+        if(x_e<0){
+            y_e-=speed_boss;
+        }
+        if(y_e<0){
+            x_e+=speed_boss;
+        }
 }
 
 void Enemies::Boss_die(int &num_life, const int type_bullet){
