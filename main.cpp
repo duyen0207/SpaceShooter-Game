@@ -138,7 +138,7 @@ void object_appear(Uint32 &time){
     }
 //SUPPORT
     int _x=rand()%(SCREEN_WIDTH-COIN_WEIGHT);
-    if((time>10 && time <70) || (time>100 && time<200)){
+    if((time>10 && time <80) || (time>100 && time<200)){
         for(int dd=0; dd<num_coins; dd++){
             coins[dd].simple_move(_x);
             coins[dd].render(renderer, coins[dd].ob_rect.x, coins[dd].ob_rect.y);
@@ -150,7 +150,7 @@ void object_appear(Uint32 &time){
         Life.render(renderer, Life.ob_rect.x, Life.ob_rect.y);
     }
 
-    if(time>3){
+    if((time>3&&time<10) || (time>50&&time<60) || (time>100&&time<140)){
         Power.simple_move(_x+10);
         Power.render(renderer, Power.ob_rect.x, Power.ob_rect.y);
     }

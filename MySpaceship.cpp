@@ -7,7 +7,7 @@ Spaceship::Spaceship(){
     ob_rect.w=SHIP_WIDTH;
     ob_rect.h=SHIP_HEIGHT;
     shape_bullet="images//bullet.png";
-    count_life=10;
+    count_life=2;
     collected_power=0;
     coins_amount=0;
 }

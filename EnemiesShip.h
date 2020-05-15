@@ -14,7 +14,7 @@ const int BOSS_HEIGHT=150;
 const int speed_e=3;
 const int num_enemy=10;
 
-const int TIME_BOSS_APPEAR=0;
+const int TIME_BOSS_APPEAR=150;
 const int SPEED_BULLET=4;
 const int SPEED_BOSS=3;
 const int num_bullet_of_boss=4;

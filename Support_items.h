@@ -13,7 +13,7 @@ const int POWER_HEIGHT=30;
 const int COIN_WEIGHT=30;
 const int COIN_HEIGHT=30;
 
-const int num_coins=10;
+const int num_coins=20;
 
 struct Reward : BaseObjects{
     int speed_r;
