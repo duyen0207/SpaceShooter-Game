@@ -22,13 +22,19 @@ void Enemies::set_position(){
 }
 
 void Enemies::HandleMove(int &life_boss, const int& x_max, const int& y_max, const int speed_e){
-    if(moveHorizontal){
+    if(life_boss==0){
+        x_e=-600;
+        y_e=-600;
+    }else if(life_boss>0){
+        if(moveHorizontal){
         x_e+=speed_e;
+        }
+        else y_e+=speed_e;
+        if(y_e>y_max || x_e>x_max){
+            set_position();
+        }
     }
-    else y_e+=speed_e;
-    if(y_e>y_max || x_e>x_max){
-        set_position();
-    }
+
 }
 
 void Enemies::shoot(SDL_Renderer* renderer, const int speed){

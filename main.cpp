@@ -258,36 +258,39 @@ void Play_Game(){
             //check collision between spaceship, bullets and enemy
 
             if(time_val>TIME_BOSS_APPEAR){
-    //BULLET OF YOU AND BOSS
-                for(int k=0; k<HYPERION.bullet_list.size(); k++){
-                    Bullet* b_col= HYPERION.bullet_list.at(k);
-                    if(b_col->blt_checkCollision(ENEMY_LV_S.ob_rect)){
-                        mark+=100*(sum_life_of_enemy_S-life_of_enemy_S);
-                        b_col->is_move=false;
-                        ENEMY_LV_S.Boss_die(life_of_enemy_S, b_col->type);
+                if(life_of_enemy_S>0){
+                //BULLET OF YOU AND BOSS
+                    for(int k=0; k<HYPERION.bullet_list.size(); k++){
+                        Bullet* b_col= HYPERION.bullet_list.at(k);
+                        if(b_col->blt_checkCollision(ENEMY_LV_S.ob_rect)){
+                            mark+=100*(sum_life_of_enemy_S-life_of_enemy_S);
+                            b_col->is_move=false;
+                            ENEMY_LV_S.Boss_die(life_of_enemy_S, b_col->type);
 
-                        HYPERION.bullet_list.erase(HYPERION.bullet_list.begin()+k);
-                        if(b_col!=NULL){
-                            delete b_col;
-                            b_col=NULL;
+                            HYPERION.bullet_list.erase(HYPERION.bullet_list.begin()+k);
+                            if(b_col!=NULL){
+                                delete b_col;
+                                b_col=NULL;
+                            }
+                        }
+                    }
+                //BOSS
+                    if(HYPERION.spac_checkCollision(ENEMY_LV_S.ob_rect) || HYPERION.spac_checkCollision(ENEMY_LV_S.e_bullet.ob_rect)){
+                        Mix_PlayChannel( -1, ship_die, 0 );
+                        HYPERION.die();
+                        ENEMY_LV_S.set_bullet_position(BOSS_WIDTH/2, BOSS_HEIGHT);
+                        life_of_enemy_S--;
+                    }
+                //BULLETS OF BOSS
+                    for(int k=0; k<num_bullet_of_boss; k++){
+                        if(HYPERION.spac_checkCollision(BULLETS_BOSS[k].ob_rect)){
+                            Mix_PlayChannel( -1, ship_die, 0 );
+                            HYPERION.die();
+                            BULLETS_BOSS[k].set_position_((ENEMY_LV_S.x_e+rand()%BOSS_WIDTH+10), (ENEMY_LV_S.y_e+BOSS_HEIGHT/3+k*SS_H));
                         }
                     }
                 }
-    //BOSS
-                if(HYPERION.spac_checkCollision(ENEMY_LV_S.ob_rect) || HYPERION.spac_checkCollision(ENEMY_LV_S.e_bullet.ob_rect)){
-                    Mix_PlayChannel( -1, ship_die, 0 );
-                    HYPERION.die();
-                    ENEMY_LV_S.set_bullet_position(BOSS_WIDTH/2, BOSS_HEIGHT);
-                    life_of_enemy_S--;
-                }
-            //BULLETS OF BOSS
-                for(int k=0; k<num_bullet_of_boss; k++){
-                    if(HYPERION.spac_checkCollision(BULLETS_BOSS[k].ob_rect)){
-                        Mix_PlayChannel( -1, ship_die, 0 );
-                        HYPERION.die();
-                        BULLETS_BOSS[k].set_position_((ENEMY_LV_S.x_e+rand()%BOSS_WIDTH+10), (ENEMY_LV_S.y_e+BOSS_HEIGHT/3+k*SS_H));
-                    }
-                }
+
 
                 if(life_of_enemy_S<1){
                     if(HYPERION.blt_checkCollision(HOME.ob_rect)){
@@ -295,34 +298,37 @@ void Play_Game(){
                     }
                 }
             }
+//SMALL ENEMIES
+            if(life_of_enemy_S>0){
+                for(int e_c=0; e_c<num_enemy; ++e_c){
+                    //bullet of spaceship and enemies
+                    for(int k=0; k<HYPERION.bullet_list.size(); k++){
+                        Bullet* b_col= HYPERION.bullet_list.at(k);
+                        if(b_col->blt_checkCollision(e_ship[e_c].ob_rect)){
+                            mark+=10;
+                            b_col->is_move=false;
+                            e_ship[e_c].set_position();
 
-            for(int e_c=0; e_c<num_enemy; ++e_c){
-                //bullet of spaceship and enemies
-                for(int k=0; k<HYPERION.bullet_list.size(); k++){
-                    Bullet* b_col= HYPERION.bullet_list.at(k);
-                    if(b_col->blt_checkCollision(e_ship[e_c].ob_rect)){
-                        mark+=10;
-                        b_col->is_move=false;
-                        e_ship[e_c].set_position();
-
-                        HYPERION.bullet_list.erase(HYPERION.bullet_list.begin()+k);
-                        if(b_col!=NULL){
-                            delete b_col;
-                            b_col=NULL;
+                            HYPERION.bullet_list.erase(HYPERION.bullet_list.begin()+k);
+                            if(b_col!=NULL){
+                                delete b_col;
+                                b_col=NULL;
+                            }
                         }
                     }
-                }
-                //spaceship and enemies/bullet of enemy
-                if(HYPERION.spac_checkCollision(e_ship[e_c].ob_rect) || HYPERION.spac_checkCollision(e_ship[e_c].e_bullet.ob_rect)){
-                    e_ship[e_c].set_position();
-                    e_ship[e_c].set_bullet_position();
-                    Mix_PlayChannel( -1, ship_die, 0 );
-                    HYPERION.die();
-                }
-                if(HYPERION.count_life<1 || win){
-                    break;
+                    //spaceship and enemies/bullet of enemy
+                    if(HYPERION.spac_checkCollision(e_ship[e_c].ob_rect) || HYPERION.spac_checkCollision(e_ship[e_c].e_bullet.ob_rect)){
+                        e_ship[e_c].set_position();
+                        e_ship[e_c].set_bullet_position();
+                        Mix_PlayChannel( -1, ship_die, 0 );
+                        HYPERION.die();
+                    }
+                    if(HYPERION.count_life<1 || win){
+                        break;
+                    }
                 }
             }
+
             if(HYPERION.count_life<1 || win){
                 quit=true;
                 End_Game();
