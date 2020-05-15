@@ -21,7 +21,7 @@ void Enemies::set_position(){
     else {y_e=-rand()%(SCREEN_HEIGHT); x_e=rand()%(SCREEN_WIDTH-E_WIDTH);}
 }
 
-void Enemies::HandleMove(const int& x_max, const int& y_max, const int speed_e){
+void Enemies::HandleMove(int &life_boss, const int& x_max, const int& y_max, const int speed_e){
     if(moveHorizontal){
         x_e+=speed_e;
     }

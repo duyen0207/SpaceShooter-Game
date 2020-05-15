@@ -157,7 +157,7 @@ void object_appear(Uint32 &time){
 //SMALL ENEMIES
     if(time>5 && life_of_enemy_S>0){
         for(int ee=0; ee<num_enemy; ee++){
-            e_ship[ee].HandleMove(SCREEN_WIDTH, SCREEN_HEIGHT, speed_e);
+            e_ship[ee].HandleMove(life_of_enemy_S, SCREEN_WIDTH, SCREEN_HEIGHT, speed_e);
             e_ship[ee].render(renderer, e_ship[ee].x_e, e_ship[ee].y_e);
             e_ship[ee].shoot(renderer, speed2);
         }
@@ -171,7 +171,7 @@ void object_appear(Uint32 &time){
 
 //BOSS
     if(time>TIME_BOSS_APPEAR){
-        ENEMY_LV_S.HandleMove(SCREEN_WIDTH, SCREEN_HEIGHT/6, SPEED_BOSS);
+        ENEMY_LV_S.HandleMove(life_of_enemy_S, SCREEN_WIDTH, SCREEN_HEIGHT/6, SPEED_BOSS);
         ENEMY_LV_S.render(renderer, ENEMY_LV_S.x_e, ENEMY_LV_S.y_e);
         ENEMY_LV_S.shoot(renderer, speed1);
         ENEMY_LV_S.e_bullet.render(renderer, ENEMY_LV_S.e_bullet.x_b, ENEMY_LV_S.e_bullet.y_b);
@@ -277,6 +277,7 @@ void Play_Game(){
                 if(HYPERION.spac_checkCollision(ENEMY_LV_S.ob_rect) || HYPERION.spac_checkCollision(ENEMY_LV_S.e_bullet.ob_rect)){
                     Mix_PlayChannel( -1, ship_die, 0 );
                     HYPERION.die();
+                    ENEMY_LV_S.set_bullet_position(BOSS_WIDTH/2, BOSS_HEIGHT);
                     life_of_enemy_S--;
                 }
             //BULLETS OF BOSS
@@ -284,6 +285,7 @@ void Play_Game(){
                     if(HYPERION.spac_checkCollision(BULLETS_BOSS[k].ob_rect)){
                         Mix_PlayChannel( -1, ship_die, 0 );
                         HYPERION.die();
+                        BULLETS_BOSS[k].set_position_((ENEMY_LV_S.x_e+rand()%BOSS_WIDTH+10), (ENEMY_LV_S.y_e+BOSS_HEIGHT/3+k*SS_H));
                     }
                 }
 

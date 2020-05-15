@@ -33,9 +33,9 @@ struct Enemies : BaseObjects{
     void free_enemies();
 
     void set_position();
-    void HandleMove(const int& x_max, const int& y_max, const int speed_e);
+    void HandleMove(int &life_boss, const int& x_max, const int& y_max, const int speed_e);
     void shoot(SDL_Renderer* renderer, const int speed);
-    void set_bullet_position(){e_bullet.x_b=x_e+E_WIDTH/2; e_bullet.y_b=y_e+E_HEIGHT; e_bullet.is_move=true;}
+    void set_bullet_position(int pos_x=E_WIDTH/2, const int &E_H=E_HEIGHT){e_bullet.x_b=x_e+pos_x; e_bullet.y_b=y_e+E_H; e_bullet.is_move=true;}
 
     void special_move(int &life, const int x_limit, const int y_limit, int speed_boss);
     void Boss_die(int &num_life, const int type_bullet);
